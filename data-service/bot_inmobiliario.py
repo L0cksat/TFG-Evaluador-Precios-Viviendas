@@ -1,3 +1,4 @@
+import sys
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -5,15 +6,40 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
+print("---INICIANDO EL ROBOT (MODO INTEGRACIÓN)---")
+print("¿¡Buscas bronca chaval!?")
+
+# VALIDACIÓN DE ARGUMENTOS
+# Java nos debe enviarnos 3 valores: Dirección, m2 y habitaciones.
+# Si contamos también el nombre del script en sí, entonces son 4 valores en total.
+
+if len(sys.argv) < 4:
+    print("ERROR: ¡Faltan argumentos!")
+    print("USO CORRECTO: python bot_inmobiliario.py 'Dirección' m2 habitaciones")
+    print("Ejemplo: python bot_inmobiliario.py 'Calle Sibelius 148, Torrevieja', 90 3")
+    sys.exit(1) #Ceramos el programa por el error.
+else:
+# Captura de variable desde la terminal
+    try:
+        #Ignoramos el sys.argv[0] ya que es el nombre del script.
+
+        direccion_input = sys.argv[1] # "Texto de la dirreción"
+
+     #IMPORTANTE todo lo que viene de la terminal es texto (String)
+        # Hay que castear las variables para que sean enteros para que el script los acepte.
+        usuario_m2 = int(sys.argv[2])
+        usuario_hab = int(sys.argv[3])
+
+        print(f"Datos recibidos: {direccion_input} | {usuario_m2}m² | {usuario_hab} habitaciones")
+    except ValueError:
+        print("ERROR DE TIPO: los m2 y habitaciones deben ser números enteros.")
+        sys.exit(1)
 
 # 1. Configuración del Driver
 driver = webdriver.Chrome()
 driver.maximize_window() # Esto es para maximizar la ventana del navegador, y así se evita elementos ocultos
 #Definimos una espera de 15 segundos
 wait = WebDriverWait(driver, 15)
-
-print("---INICIANDO EL ROBOT---")
-print("¿¡Buscas bronca chaval!?")
 
 try:
     driver.get("https://www.trovimap.com")
@@ -51,6 +77,8 @@ try:
 
     print("Buscando la barra de búsqueda...")
 
+    print(f"Escribiendo dirección: {direccion_input}")
+
     # Enfocamos en el atributo 'placeholder' que es más seguro que buscar por clases génericas.
 
     selector_css = "input[placeholder='Escriba una ciudad, comunidad, CP']"
@@ -64,10 +92,8 @@ try:
     # Hacemos limpieza por si acaso
     caja_busqueda.clear()
 
-    #Ahora escribimos la dirección de prueba
-    direccion = "Carrer Sibelius 148, 03184 Torrevieja"
-    print(f"Escribiendo dirección: {direccion}")
-    caja_busqueda.send_keys(direccion)
+    #Ahora enviamos la dirección recogida del formulario frontend
+    caja_busqueda.send_keys(direccion_input)
 
     # un pausa para que pueda ver que escribe en el navegador.
     print("Estabilizando la página (2s)...")
@@ -98,12 +124,7 @@ try:
     print("Captura guardada como 'Captura_exito.png'")
 
     # 5. ---EXTRACCIÓN DE DATOS---
-    # --Aquí realizamos una simulación de datos de un usuario para realizar pruebas.
-    # Estos datos más tarde vendrán del Frontend (Angular)
-
-    usuario_m2 = 90
-    usuario_hab = 3
-
+    
     # Hay que añadir márgenes de tolerancia
     margen_m2 = 0.30 # Se aceptan casas un 30% más grandes o pequeños
     margen_hab = 1 # Se aceptan casas con 1 habitación por arriba o abajo
