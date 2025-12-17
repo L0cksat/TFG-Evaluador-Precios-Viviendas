@@ -1,0 +1,58 @@
+[
+    {
+        "precio_raw": "129969",
+        "m2": 65,
+        "habitaciones": 2,
+        "ubicacion": "Torrevieja",
+        "titulo": "casa en venta en torrevieja, la siesta - el salado - torreta"
+    },
+    {
+        "precio_raw": "154900",
+        "m2": 83,
+        "habitaciones": 2,
+        "ubicacion": "Torrevieja",
+        "titulo": "casa en venta en torrevieja, el chaparral"
+    },
+    {
+        "precio_raw": "335950",
+        "m2": 73,
+        "habitaciones": 3,
+        "ubicacion": "Torrevieja",
+        "titulo": "chalet en venta en torrevieja, el chaparral"
+    },
+    {
+        "precio_raw": "149999",
+        "m2": 90,
+        "habitaciones": 2,
+        "ubicacion": "Torrevieja",
+        "titulo": "adosada en venta en torrevieja, la siesta - el salado - torreta"
+    },
+    {
+        "precio_raw": "137000",
+        "m2": 76,
+        "habitaciones": 3,
+        "ubicacion": "con Ascensor",
+        "titulo": "apartamento en venta en torrevieja, la siesta - el salado - torreta"
+    },
+    {
+        "precio_raw": "144900",
+        "m2": 76,
+        "habitaciones": 3,
+        "ubicacion": "con Ascensor",
+        "titulo": "apartamento en venta en torrevieja, san luis"
+    },
+    {
+        "precio_raw": "129969",
+        "m2": 65,
+        "habitaciones": 2,
+        "ubicacion": "Torrevieja",
+        "titulo": "adosada en venta en torrevieja, la siesta"
+    },
+    {
+        "precio_raw": "129969",
+        "m2": 65,
+        "habitaciones": 2,
+        "ubicacion": "Torrevieja",
+        "titulo": "adosada en venta en torrevieja, la siesta"
+    }
+]
