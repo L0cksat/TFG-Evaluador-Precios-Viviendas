@@ -65,7 +65,7 @@ try:
     caja_busqueda.clear()
 
     #Ahora escribimos la dirección de prueba
-    direccion = "Carrer Sibelius, 03184 Torrevieja"
+    direccion = "Carrer Sibelius 148, 03184 Torrevieja"
     print(f"Escribiendo dirección: {direccion}")
     caja_busqueda.send_keys(direccion)
 
@@ -78,11 +78,16 @@ try:
     caja_busqueda.send_keys(Keys.RETURN)
     print("ENTER pulsado. Búsqueda enviada...")
 
+    # Aquí usamos este print para confirmar que estamos viendo casas en la cercanía de la 
+    # driección de la vivienda introducida.
+    print(f"URL de  resultado: {driver.current_url}")
+
     #Necesitamos pulsar un boton más para poder ver todas las propiedades en lista con el mapa.
     boton_ver_todos = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Ver todas')]")))
 
     boton_ver_todos.click()
     print("Botón Ver todas pulsada...")
+    print(f"URL de  resultado: {driver.current_url}")
 
     # 4. ---VERIFICACIÓN DE ÉXITO---
     print("Esperando carga de resultados..")
@@ -93,6 +98,18 @@ try:
     print("Captura guardada como 'Captura_exito.png'")
 
     # 5. ---EXTRACCIÓN DE DATOS---
+    # --Aquí realizamos una simulación de datos de un usuario para realizar pruebas.
+    # Estos datos más tarde vendrán del Frontend (Angular)
+
+    usuario_m2 = 90
+    usuario_hab = 3
+
+    # Hay que añadir márgenes de tolerancia
+    margen_m2 = 0.30 # Se aceptan casas un 30% más grandes o pequeños
+    margen_hab = 1 # Se aceptan casas con 1 habitación por arriba o abajo
+
+    # ---
+
     print("Esperando que se carguen las tarjetas de propiedades...")
     wait.until(EC.presence_of_element_located((By.CLASS_NAME, "listing__container")))
 
@@ -128,17 +145,31 @@ try:
             try:
                 # Encontramos el primer span que está dentro de details.
                 m2_texto = casa.find_element(By.CSS_SELECTOR, ".card__details span:nth-of-type(1)").text
-                item['m2'] = m2_texto.replace("m²", "").strip() # Limpieza del dato, convertimos "167 m²" -> "167"
+                m2_limpio = m2_texto.replace("m²", "").strip() # Limpieza del dato, convertimos "167 m²" -> "167"
+                item['m2'] = int(m2_limpio) # Aquí casteamos para convertir por fuerza el número a enmtero
             except:
                 item['m2'] ="0"
+
+            # Adición de filtros: Filtro 1 -- Comparación de m2 --
+            # Se calcula el rango de metros
+            min_m2 = usuario_m2 * (1 - margen_m2)
+            max_m2 = usuario_m2 * (1 + margen_m2)
+
+            # Añadimos este if not por si la casa es muy grande o muy pequeña, se ignora y no se mete en lista.
+            if not (min_m2 <= item['m2'] <= max_m2):
+                continue
 
             # 5.3 Extracción del número de habitaciones
             try:
                 # Encontramos los número de habitaciones
                 habs_texto = casa.find_element(By.CSS_SELECTOR, ".card__details span:nth-of-type(2)").text
-                item['habitaciones'] = habs_texto.strip()
+                item['habitaciones'] = int(habs_texto.strip()) # Casteamos a int para tener un número entero limpio
             except:
                 item['habitaciones'] = "0" 
+
+                # Filtro 2 -- Comparación de habitaciones --
+                if not (usuario_hab - margen_hab <=item['habitaciones'] <= usuario_hab + margen_hab):
+                    continue
             
             # 5.4 Extracción de la ubicación
             try:
