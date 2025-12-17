@@ -1,4 +1,6 @@
 import sys
+import os
+import json
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -10,7 +12,8 @@ print("---INICIANDO EL ROBOT (MODO INTEGRACIÓN)---")
 print("¿¡Buscas bronca chaval!?")
 
 # VALIDACIÓN DE ARGUMENTOS
-# Java nos debe enviarnos 3 valores: Dirección, m2 y habitaciones.
+# Java nos debe enviarnos 3 valores: Dirección, m2 y habitaciones. En este caso estamos usando el terminal para poder
+# realizar pruebas de funcionamiento.
 # Si contamos también el nombre del script en sí, entonces son 4 valores en total.
 
 if len(sys.argv) < 4:
@@ -34,6 +37,17 @@ else:
     except ValueError:
         print("ERROR DE TIPO: los m2 y habitaciones deben ser números enteros.")
         sys.exit(1)
+
+# Preparación de las carpetas para screenshots y archivos json
+carpeta_json = "json"
+carpeta_img = "screenshots"
+
+# El os.makedirs crea las carpetas necesarias, exist_ok=True, si existe no me des el error, sigue en adelante.
+os.makedirs(carpeta_json, exist_ok=True)
+os.makedirs(carpeta_img, exist_ok=True)
+
+print(f"Carpetas '{carpeta_img}' y '{carpeta_json}' verificadas")
+
 
 # 1. Configuración del Driver
 driver = webdriver.Chrome()
@@ -120,8 +134,10 @@ try:
     #Esperamos 5s para obtener los resultados
     time.sleep(5)
 
-    driver.save_screenshot("Captura_exito.png")
-    print("Captura guardada como 'Captura_exito.png'")
+    # Añadimos os.path.join para unir carpeta con archivo de forma segura
+    ruta_captura = os.path.join(carpeta_img, "Captura_exito.png")
+    driver.save_screenshot(ruta_captura)
+    print(f"Captura guardada en {ruta_captura}")
 
     # 5. ---EXTRACCIÓN DE DATOS---
     
@@ -220,9 +236,10 @@ try:
     print(datos_comparables) # Esto es lo que luego exportaremos al Excel o a otra parte de la app para el calcúlo.
 
     # 7. Exportación de los datos al formato JSON
-    import json
 
     nombre_archivo = "resultados_scraping.json"
+
+    ruta_json = os.path.join(carpeta_json, nombre_archivo)
 
     with open(nombre_archivo, 'w', encoding='utf-8') as f:
         # dump volca la lista al archivo
@@ -230,7 +247,7 @@ try:
         # indent=4 lo deja bonito y legible
         json.dump(datos_comparables, f, ensure_ascii=False, indent=4)
 
-    print(f"Datos guardados exitosamente en '{nombre_archivo}'")
+    print(f"Datos guardados exitosamente en '{ruta_json}'")
 
 except Exception as e:
     print("Hubo un error en la búsqueda:", e)
