@@ -3,9 +3,9 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-body',
   imports: [],
-  templateUrl: './body.html',
-  styleUrl: './body.css',
+  templateUrl: './home.html',
+  styleUrl: './home.css',
 })
-export class Body {
+export class HomeComponent {
 
 }
