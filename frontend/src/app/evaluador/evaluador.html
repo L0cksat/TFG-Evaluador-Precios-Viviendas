@@ -1,33 +1,33 @@
-<div class="container mt-4">
+<div class="container eval-container">
   <h2>Evaluador de Vivienda</h2>
   
   <form [formGroup]="formEvaluacion">
     
-    <div class="mb-3">
-      <label class="form-label">Dirección</label>
-      <input type="text" formControlName="direccion" class="form-control">
+    <div class="cta-group">
+      <label>Dirección</label>
+      <input type="text" formControlName="direccion">
       @if (formEvaluacion.get('direccion')?.invalid && formEvaluacion.get('direccion')?.touched) {
-        <small class="text-danger">La dirección es obligatoria.</small>
+        <div class="text-danger">La dirección es obligatoria.</div>
       }
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Metros Cuadrados</label>
-      <input type="number" formControlName="metros" class="form-control">
+    <div class="cta-group">
+      <label>Metros Cuadrados</label>
+      <input type="number" formControlName="metros">
       @if (formEvaluacion.get('metros')?.invalid && formEvaluacion.get('metros')?.touched) {
-        <small class="text-danger">Ingrese un valor válido de metros.</small>
+        <div class="text-danger">Ingrese un valor válido de metros.</div>
       }
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Número de Habitaciones</label>
-      <input type="number" formControlName="habitaciones" class="form-control">
+    <div class="cta-group">
+      <label>Número de Habitaciones</label>
+      <input type="number" formControlName="habitaciones">
       @if (formEvaluacion.get('habitaciones')?.invalid && formEvaluacion.get('habitaciones')?.touched) {
-        <small class="text-danger">Ingrese el número de habitaciones.</small>
+        <div class="text-danger">Ingrese el número de habitaciones.</div>
       }
     </div>
 
-    <button type="submit" class="btn btn-primary" [disabled]="formEvaluacion.invalid" (click)="onSubmit()">
+    <button type="submit" class="btn-eval" [disabled]="formEvaluacion.invalid" (click)="onSubmit()">
       Evaluar Propiedad
     </button>
 

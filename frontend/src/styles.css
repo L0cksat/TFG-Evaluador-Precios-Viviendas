@@ -5,7 +5,7 @@
   --neutral-tan: #c9b280;
   --deep-forest: #24441c;
   --white: #ffffff;
-  --gray-light: #f4f4f4;
+  --gray-light: #ebebeb;
 }
 
 * {
@@ -39,3 +39,4 @@ button:hover {
   filter: brightness(90%);
   transform: translateY(-1px);
 }
+
