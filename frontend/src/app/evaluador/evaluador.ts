@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { InmobilarioBuscarService } from '../services/inmobilario-buscar';
+import { HomeDataService } from '../services/home-data';
 
 @Component({
   selector: 'app-evaluador',
@@ -12,11 +13,13 @@ import { InmobilarioBuscarService } from '../services/inmobilario-buscar';
 export class EvaluadorComponent implements OnInit {
   formEvaluacion!: FormGroup;
 
-  constructor(private fb: FormBuilder, private ibs: InmobilarioBuscarService) {}
+  constructor(private fb: FormBuilder, private ibs: InmobilarioBuscarService, private hds: HomeDataService) {}
 
   ngOnInit(): void {
+    const direccionDeHome = this.hds.direccion;
+
     this.formEvaluacion = this.fb.group({
-      direccion: ['', Validators.required],
+      direccion: [direccionDeHome, Validators.required],
       metros: ['', [Validators.required, Validators.min(1)]],
       habitaciones: ['', [Validators.required, Validators.min(0)]]
     });
