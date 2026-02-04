@@ -9,10 +9,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: .5rem 0;
 }
 
 .logo img {
-  width: 30%;
   aspect-ratio: 1 / 1; /* Forces a perfect square */
   object-fit: cover;   /* Crops the edges to fill the square */
   object-position: center; /* Determines which part of the image is kept */
@@ -45,7 +45,12 @@
 }
 
 @media (max-width: 768px) {
-  .nav-links {
-    gap: 0.75rem;
+  .logo img{
+    display: none;
   }
+
+  .nav-wrapper {
+    display: block;
+  }
+
 }

@@ -9,8 +9,5 @@ export const routes: Routes = [
         path:'evaluador',
         loadComponent: () => import('./evaluador/evaluador').then(m => m.EvaluadorComponent)
     },
-    {
-        path:'**',
-        redirectTo: ''
-    }
+    
 ];
