@@ -1,0 +1,35 @@
+<div class="container eval-container">
+  <h2>Evaluador de Vivienda</h2>
+  
+  <form [formGroup]="formEvaluacion">
+    
+    <div class="cta-group">
+      <label>Dirección</label>
+      <input type="text" formControlName="direccion">
+      @if (formEvaluacion.get('direccion')?.invalid && formEvaluacion.get('direccion')?.touched) {
+        <div class="text-danger">La dirección es obligatoria.</div>
+      }
+    </div>
+
+    <div class="cta-group">
+      <label>Metros Cuadrados</label>
+      <input type="number" formControlName="metros">
+      @if (formEvaluacion.get('metros')?.invalid && formEvaluacion.get('metros')?.touched) {
+        <div class="text-danger">Ingrese un valor válido de metros.</div>
+      }
+    </div>
+
+    <div class="cta-group">
+      <label>Número de Habitaciones</label>
+      <input type="number" formControlName="habitaciones">
+      @if (formEvaluacion.get('habitaciones')?.invalid && formEvaluacion.get('habitaciones')?.touched) {
+        <div class="text-danger">Ingrese el número de habitaciones.</div>
+      }
+    </div>
+
+    <button type="submit" class="btn-eval" [disabled]="formEvaluacion.invalid" (click)="onSubmit()">
+      Evaluar Propiedad
+    </button>
+
+  </form>
+</div>

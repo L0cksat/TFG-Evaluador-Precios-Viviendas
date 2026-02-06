@@ -1,33 +1,28 @@
 .header {
   background: var(--white);
-  padding: 1rem 0;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
-  z-index: 1000;
 }
 
 .nav-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: .5rem 0;
 }
 
-.logo {
-  font-weight: 800;
-  font-size: 1.5rem;
-  letter-spacing: -0.5px;
-}
-
-.logo span {
-  color: var(--primary-main);
+.logo img {
+  aspect-ratio: 1 / 1; /* Forces a perfect square */
+  object-fit: cover;   /* Crops the edges to fill the square */
+  object-position: center; /* Determines which part of the image is kept */
 }
 
 .nav-links {
   display: flex;
   list-style: none;
   gap: 1.5rem;
-  align-items: center;
+  justify-content: center;
 }
 
 .nav-links a {
@@ -50,11 +45,12 @@
 }
 
 @media (max-width: 768px) {
-  .nav-links {
-    gap: 0.75rem;
+  .logo img{
+    display: none;
   }
-  
-  .logo {
-    font-size: 1.2rem;
+
+  .nav-wrapper {
+    display: block;
   }
+
 }

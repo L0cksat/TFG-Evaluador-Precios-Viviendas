@@ -5,7 +5,7 @@
   --neutral-tan: #c9b280;
   --deep-forest: #24441c;
   --white: #ffffff;
-  --gray-light: #f4f4f4;
+  --gray-light: #ebebeb;
 }
 
 * {
@@ -22,15 +22,9 @@ body {
 }
 
 .container {
-  width: 90%;
+  width: 95%;
   max-width: 1200px;
-  margin: 0 auto;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
+  margin: auto;
 }
 
 button {
@@ -45,3 +39,4 @@ button:hover {
   filter: brightness(90%);
   transform: translateY(-1px);
 }
+
