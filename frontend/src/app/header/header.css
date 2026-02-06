@@ -1,0 +1,56 @@
+.header {
+  background: var(--white);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+}
+
+.nav-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5rem 0;
+}
+
+.logo img {
+  aspect-ratio: 1 / 1; /* Forces a perfect square */
+  object-fit: cover;   /* Crops the edges to fill the square */
+  object-position: center; /* Determines which part of the image is kept */
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--deep-forest);
+  font-size: 0.95rem;
+}
+
+.btn-login {
+  background: transparent;
+  color: var(--deep-forest);
+  border: 1px solid var(--deep-forest);
+  padding: 0.5rem 1.2rem;
+}
+
+.btn-signup {
+  background: var(--deep-forest);
+  color: var(--white);
+  padding: 0.6rem 1.4rem;
+}
+
+@media (max-width: 768px) {
+  .logo img{
+    display: none;
+  }
+
+  .nav-wrapper {
+    display: block;
+  }
+
+}
