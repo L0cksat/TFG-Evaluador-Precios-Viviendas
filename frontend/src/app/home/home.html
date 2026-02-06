@@ -1,0 +1,13 @@
+<section class="hero container">
+  <div class="hero-content">
+    <h1>Conozca <span class="highlight">el verdadero valor</span> de su vivienda.</h1>
+    <p>Analizamos los datos del mercado circundante para ofrecerte la estimación más precisa en cuestión de segundos.</p>
+    <div class="cta-group">
+      <input #direccion placeholder="Introduzca su dirección">
+      <button class="btn-estimate" (click)="redirectToEvaluador(direccion.value)">Obtener presupuesto</button>
+    </div>
+  </div>
+  <div class="hero-image">
+    <img ngSrc="images/casa-roja.jpg" height="400" width="400"alt="casa-roja">
+  </div>
+</section>
