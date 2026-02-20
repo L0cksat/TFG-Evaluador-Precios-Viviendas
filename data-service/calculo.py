@@ -2,6 +2,10 @@ import json
 import os
 import sys
 
+print("---Arancando bot calculador CalcuBot ^_^---")
+print("¡¿Todvía sigues buscando bronca chaval?!")
+print()
+print("-" * 50)
 try:
     usuario_m2 = float(sys.argv[2])
     print(f"Procesando cálculo para una vivienda de {usuario_m2} m2...")
@@ -12,6 +16,8 @@ except (IndexError, ValueError):
 # Primero vamos a definir la ruta donde está el archivo
 ruta_archivo = os.path.join("json", "resultados_scraping.json")
 
+# Creamos una lista vacía antes
+lista_precio_m2 = []
 try:
     # Abrimos el archivo en modo 'r' (read)
     with open(ruta_archivo, 'r', encoding='utf-8') as f:
@@ -21,27 +27,33 @@ except FileNotFoundError:
     print(" Error: No encuentro el archivo. ¿Has ejecutado el scraper primero?")
     sys.exit()
 
-    # Creamos una lista vacía antes
-    lista_precio_m2 = []
 
-    # Creamos el bucle para llenar la lista
-    for casa in datos_casas:
-        try:
-            # Convertimos a números
-            precio = float(casa['precio'])
-            metros = float(casa['m2'])
+# Creamos el bucle para llenar la lista
+for casa in datos_casas:
+    try:
+        # Vamos a sacar las casa con ubicaciones no válidos
+        ubicacion = casa.get('ubicacion', '')
 
-            # Tenemos una protección: Que no se puede dividir por creo
-            if metros > 0:
-                precio_unitario = precio / metros
-
-                # Cuardamos el resultado en la lista
-                lista_precio_m2.append(precio_unitario)
-
-
-        except ValueError:
-            # Si algún dato viene sucio, saltamos esa casa
+        #Aquí va el filtro
+        if "Acensor" in ubicacion:
+            print(f"Descartando casa por ubicación inválida: {ubicacion}")
             continue
+
+        # Convertimos a números
+        precio = float(casa['precio_raw'])
+        metros = float(casa['m2'])
+
+        # Tenemos una protección: Que no se puede dividir por creo
+        if metros > 0:
+            precio_unitario = precio / metros
+
+            # Cuardamos el resultado en la lista
+            lista_precio_m2.append(precio_unitario)
+
+
+    except ValueError:
+        # Si algún dato viene sucio, saltamos esa casa
+        continue
             
 if len(lista_precio_m2) > 0:
     # Caluclamos la media del m2 de la zona
@@ -52,11 +64,6 @@ if len(lista_precio_m2) > 0:
 
     print(f"Precio medio zona: {media_zona:.2f} €/m2")
     print(f"Valor estimado de tu casa: {precio_estimado: .2f} €")
-
-    #Aquí guardaríamos el resultado en un nuevo JSON para enviarlo al Frontend
-    carpeta_json = "json"
-    nombre_archivo = "precio_estimado.json"
-    ruta_json = os.path.join(carpeta_json, nombre_archivo)
 
     # Empaqueteado de datos
     datos_finales = {
@@ -74,10 +81,22 @@ else:
     }
     print("No se han encontrado datos válidos para calcular la media.")
 
+#Aquí guardaríamos el resultado en un nuevo JSON para enviarlo al Frontend
+carpeta_json = "json"
+nombre_archivo = "precio_estimado.json"
+ruta_json = os.path.join(carpeta_json, nombre_archivo)
+
 with open(ruta_json, 'w', encoding='utf-8') as f:
         json.dump(datos_finales, f, ensure_ascii=False, indent=4)
 
 print(f"Datos guardados éxitosamente en {ruta_json}")
 print(f"Archivo guardado como: {nombre_archivo}")
 print()
+try:
+    os.remove(ruta_archivo)
+    print("Archivo temporal de scraping eliminado.")
+except OSError:
+    pass
+print("-" * 50)
+print("---Fin del script---")
             
