@@ -63,7 +63,12 @@ def ejecutar_bronca():
     comando_calculo = [sys.executable, "calculo.py", direccion, metros]
     subprocess.run(comando_calculo)
 
-    print("\n Proceso completo. El Backend ya puede leer 'precio_estimado.json'")
+    # Cuarto, llamamos a generar el PDF para el enviarlo al backend
+    print("\n--- PASO 3: Generando el PDF para el informe ---")
+    comando_generar_pdf = [sys.executable, "generador_pdf.py"]
+    subprocess.run(comando_generar_pdf)
+
+    print("\n Proceso completo. El Backend ya puede leer 'precio_estimado.json', y usar 'informe_tasacion.pdf'")
 
 if __name__ == "__main__":
     ejecutar_bronca()

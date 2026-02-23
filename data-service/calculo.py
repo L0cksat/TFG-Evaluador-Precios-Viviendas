@@ -68,6 +68,8 @@ if len(lista_precio_m2) > 0:
     # Empaqueteado de datos
     datos_finales = {
         "status": "success",
+        "direccion": sys.argv[1],
+        "metros_cuadrados": float(sys.argv[2]),
         "precio_estimado": round(precio_estimado, 2),
         "media_m2_zona": round(media_zona, 2),
         "cantidad_casas_analizadas": len(lista_precio_m2)
