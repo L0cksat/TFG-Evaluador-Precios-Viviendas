@@ -81,6 +81,26 @@ else:
     }
     print("No se han encontrado datos válidos para calcular la media.")
 
+# Tenemos que detectar si esta en modo pro primero
+ruta_catastro = os.path.join("json", "datos_extraidos_catastro.json")
+
+# Este bloque if es para saber si el usuario ha entrado en modo básico o pro -> Este es para saber si está en modo pro.
+if os.path.exists(ruta_catastro):
+    print("Modo Pro detectado: Simulando Valor Mínimo de Hacienda...")
+
+    #La simulación va a descontar 20% del valor estimado.
+    valor_minimo_hacienda = precio_estimado * 0.80
+
+    # Hay que añadirlo al JSON final usando el dicconario de Python (magia)
+    datos_finales["valor_minimo_hacienda"] = round(valor_minimo_hacienda, 2)
+
+    # Borrado ecologíco del JSON del Catastro una vez usado.
+    try:
+        os.remove(ruta_catastro)
+        print("Archivo temporal del Catastro eliminado.")
+    except OSError:
+        pass
+
 #Aquí guardaríamos el resultado en un nuevo JSON para enviarlo al Frontend
 carpeta_json = "json"
 nombre_archivo = "precio_estimado.json"
