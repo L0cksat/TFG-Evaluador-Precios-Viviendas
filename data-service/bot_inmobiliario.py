@@ -2,6 +2,7 @@ import sys
 import os
 import json
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -57,10 +58,15 @@ os.makedirs(carpeta_img, exist_ok=True)
 print(f"Carpetas '{carpeta_img}' y '{carpeta_json}' verificadas")
 print()
 
+# 0.1 Configuración del Headless browsing para el driver de Chrome
+opciones_chrome = Options()
+opciones_chrome.add_argument("--headless=new") # Esto es lo que le hace invisible ;)
+opciones_chrome.add_argument("--disable-gpu") # Esto es para evitar errores en servidores.
+opciones_chrome.add_argument("--window-size=1920,1080") # Esto es para dicer al Chrome que maximice la pantalla "fantasma"
 
 # 1. Configuración del Driver
-driver = webdriver.Chrome()
-driver.maximize_window() # Esto es para maximizar la ventana del navegador, y así se evita elementos ocultos
+driver = webdriver.Chrome(options=opciones_chrome)
+#driver.maximize_window() # Esto es para maximizar la ventana del navegador, y así se evita elementos ocultos
 #Definimos una espera de 15 segundos
 wait = WebDriverWait(driver, 15)
 
