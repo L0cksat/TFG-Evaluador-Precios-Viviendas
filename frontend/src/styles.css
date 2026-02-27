@@ -1,8 +1,8 @@
 :root {
   --primary-light: #c8e07b;
-  --primary-main: #749a6a;
-  --accent-purple: #a8a8e4;
-  --neutral-tan: #c9b280;
+  --primary-main: #587d4e;
+  --accent-purple: #8686d1;
+  --neutral-tan: #b09761;
   --deep-forest: #24441c;
   --white: #ffffff;
   --gray-light: #ebebeb;
@@ -15,7 +15,7 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family:sans-serif, system-ui;
   color: var(--deep-forest);
   line-height: 1.6;
   background-color: var(--white);
