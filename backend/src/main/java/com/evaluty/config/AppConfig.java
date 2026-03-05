@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Configuración general de la aplicación.
- * RestTemplate eliminado — las llamadas HTTP al Catastro las gestiona directamente Python.
+ * Las llamadas HTTP al Catastro las gestiona directamente Python (catastro.py).
  */
 @Configuration
 public class AppConfig {
