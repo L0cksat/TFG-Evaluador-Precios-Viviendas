@@ -1,13 +1,12 @@
 package com.evaluty.config;
 
-import org.springframework.context.annotation.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuración general de la aplicación.
+ * RestTemplate eliminado — las llamadas HTTP al Catastro las gestiona directamente Python.
+ */
 @Configuration
 public class AppConfig {
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+    // Beans adicionales aquí si son necesarios en el futuro
 }

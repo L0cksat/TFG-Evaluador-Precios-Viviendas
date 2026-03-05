@@ -4,33 +4,34 @@ import lombok.*;
 import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "valoraciones")
 public class Valoracion {
-    @Id private String id;
 
-    // Datos de la vivienda consultada
+    @Id
+    private String id;
+
+    // --- Datos de entrada ---
     private String direccion;
-    private Integer metrosCuadrados;
-    private Integer habitaciones;
+    private Double metrosCuadrados;
 
-    // Resultados del algoritmo
+    // --- Resultados de calculo.py ---
+    private String status;
     private Double precioEstimado;
-    private Double precioPorMetroCuadrado;
-    private String rangoConfianza;
+    private Double mediaM2Zona;
+    private Integer cantidadCasasAnalizadas;
 
-    // Catastro (opcional)
-    private String numeroCatastro;
-    private Double valoracionMinimaOficial;
-    private String avisoFiscal;
+    // --- Solo en Modo Pro (con referencia catastral) ---
+    private String referenciaCatastral;
+    private Double valorMinimoHacienda;
 
-    // Comparables del scraping
-    private List<PropiedadComparable> comparables;
+    // --- Ruta al PDF generado por Python ---
+    private String rutaPdf;
 
-    // Metadatos
+    // --- Metadatos ---
     private String userId;
-    @Builder.Default private Boolean esPublica = false;
-    @CreatedDate private LocalDateTime fechaCreacion;
+
+    @CreatedDate
+    private LocalDateTime fechaCreacion;
 }

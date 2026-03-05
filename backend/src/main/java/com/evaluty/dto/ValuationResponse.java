@@ -1,25 +1,27 @@
 package com.evaluty.dto;
 
-import com.evaluty.model.PropiedadComparable;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data @Builder @AllArgsConstructor @NoArgsConstructor
 public class ValuationResponse {
+
     private String id;
+
+    // Datos de la valoración
+    private String status;
     private String direccion;
-    private Integer metrosCuadrados;
-    private Integer habitaciones;
-
+    private Double metrosCuadrados;
     private Double precioEstimado;
-    private Double precioPorMetroCuadrado;
-    private String rangoConfianza;
+    private Double mediaM2Zona;
+    private Integer cantidadCasasAnalizadas;
 
-    // Catastro (solo si se solicitó)
-    private Double valoracionMinimaOficial;
-    private String avisoFiscal;
+    // Solo en Modo Pro
+    private String referenciaCatastral;
+    private Double valorMinimoHacienda;
 
-    private List<PropiedadComparable> comparables;
+    // Para descargar el informe PDF
+    private String urlInforme;
+
     private LocalDateTime fechaCreacion;
 }

@@ -1,6 +1,6 @@
 package com.evaluty.service;
 
-import com.evaluty.model.PropiedadComparable;
+import com.evaluty.dto.ValuationRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -8,11 +8,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.*;
+import java.nio.file.*;
+import java.util.Map;
 
 /**
- * Servicio que lanza el bot de scraping Python como subproceso
- * y parsea el JSON resultante.
+ * Lanza main.py como subproceso y devuelve el contenido de precio_estimado.json.
+ *
+ * main.py tiene dos modos:
+ *   Modo Básico (4 args): python main.py <dirección> <metros> <habitaciones>
+ *   Modo Pro    (3 args): python main.py <referencia_catastral> <habitaciones>
+ *
+ * main.py orquesta internamente: catastro.py → bot_inmobiliario.py → calculo.py → generador_pdf.py
+ * Los archivos de salida quedan en data-service/json/
  */
 @Slf4j
 @Service
@@ -21,96 +28,92 @@ public class PythonBotService {
     @Value("${evaluty.python.executable}")
     private String pythonExecutable;
 
-    @Value("${evaluty.python.bot-path}")
-    private String botPath;
+    @Value("${evaluty.python.main-path}")
+    private String mainPath;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
-     * Ejecuta el bot y devuelve la lista de propiedades comparables.
+     * Ejecuta el flujo completo de Python y devuelve el Map con los datos de precio_estimado.json.
      */
-    public List<PropiedadComparable> ejecutarBot(String direccion, int m2, int habitaciones) {
-        log.info("Lanzando bot Python: direccion='{}', m2={}, hab={}", direccion, m2, habitaciones);
+    public Map<String, Object> ejecutar(ValuationRequest request) {
+        ProcessBuilder pb;
+
+        if (request.esModoProValido()) {
+            log.info("Lanzando Python Modo Pro — RC: {}, habs: {}",
+                    request.getReferenciaCatastral(), request.getHabitaciones());
+            pb = new ProcessBuilder(
+                    pythonExecutable,
+                    "main.py",
+                    request.getReferenciaCatastral(),
+                    String.valueOf(request.getHabitaciones())
+            );
+        } else if (request.esModoBasicoValido()) {
+            log.info("Lanzando Python Modo Básico — dir: {}, m2: {}, habs: {}",
+                    request.getDireccion(), request.getMetrosCuadrados(), request.getHabitaciones());
+            pb = new ProcessBuilder(
+                    pythonExecutable,
+                    "main.py",
+                    request.getDireccion(),
+                    String.valueOf(request.getMetrosCuadrados()),
+                    String.valueOf(request.getHabitaciones())
+            );
+        } else {
+            throw new IllegalArgumentException(
+                "Debes proporcionar o (dirección + metros + habitaciones) " +
+                "o (referencia catastral + habitaciones)");
+        }
+
+        // El working directory debe ser la carpeta data-service,
+        // porque main.py llama a los demás scripts con rutas relativas
+        File dataServiceDir = new File(mainPath).getParentFile();
+        pb.directory(dataServiceDir);
+        pb.redirectErrorStream(true);
 
         try {
-            ProcessBuilder pb = new ProcessBuilder(
-                    pythonExecutable,
-                    botPath,
-                    direccion,
-                    String.valueOf(m2),
-                    String.valueOf(habitaciones)
-            );
-            pb.redirectErrorStream(true);
-
             Process process = pb.start();
 
-            // Leemos todo el output del proceso
-            StringBuilder output = new StringBuilder();
+            // Logueamos el output del proceso para debug
             try (BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    log.debug("[BOT] {}", line);
-                    output.append(line).append("\n");
-                }
+                reader.lines().forEach(line -> log.debug("[PYTHON] {}", line));
             }
 
             int exitCode = process.waitFor();
-            log.info("Bot terminado con código: {}", exitCode);
+            log.info("Python terminó con código: {}", exitCode);
 
             if (exitCode != 0) {
-                log.error("El bot Python terminó con error. Output:\n{}", output);
-                return Collections.emptyList();
+                throw new RuntimeException("El proceso Python terminó con error (código " + exitCode + ")");
             }
 
-            // El JSON queda en json/resultados_scraping.json (relativo al bot)
-            // Lo leemos desde ahí directamente
-            File jsonFile = resolveJsonFile();
-            if (!jsonFile.exists()) {
-                log.warn("No se encontró el archivo JSON de resultados");
-                return Collections.emptyList();
+            // Leemos el JSON de resultado que genera calculo.py
+            Path rutaJson = dataServiceDir.toPath().resolve("json/precio_estimado.json");
+
+            if (!Files.exists(rutaJson)) {
+                throw new RuntimeException("Python no generó el archivo precio_estimado.json");
             }
 
-            List<Map<String, Object>> rawList = objectMapper.readValue(
-                    jsonFile, new TypeReference<>() {});
+            Map<String, Object> resultado = objectMapper.readValue(
+                    rutaJson.toFile(), new TypeReference<>() {});
 
-            return rawList.stream()
-                    .map(this::mapToPropiedadComparable)
-                    .filter(Objects::nonNull)
-                    .toList();
+            if ("error".equals(resultado.get("status"))) {
+                throw new RuntimeException("Python devolvió error: " + resultado.get("message"));
+            }
+
+            return resultado;
 
         } catch (IOException | InterruptedException e) {
-            log.error("Error ejecutando el bot Python", e);
             Thread.currentThread().interrupt();
-            return Collections.emptyList();
+            log.error("Error ejecutando Python", e);
+            throw new RuntimeException("No se pudo ejecutar el proceso de valoración: " + e.getMessage());
         }
     }
 
-    private PropiedadComparable mapToPropiedadComparable(Map<String, Object> raw) {
-        try {
-            int precio = Integer.parseInt(raw.getOrDefault("precio_raw", "0").toString());
-            int m2 = ((Number) raw.getOrDefault("m2", 0)).intValue();
-            int hab = ((Number) raw.getOrDefault("habitaciones", 0)).intValue();
-
-            if (precio == 0 || m2 == 0) return null;
-
-            return PropiedadComparable.builder()
-                    .titulo((String) raw.getOrDefault("titulo", "Sin título"))
-                    .ubicacion((String) raw.getOrDefault("ubicacion", "Desconocida"))
-                    .precio(precio)
-                    .metrosCuadrados(m2)
-                    .habitaciones(hab)
-                    .precioPorM2(m2 > 0 ? (double) precio / m2 : 0.0)
-                    .build();
-        } catch (Exception e) {
-            log.warn("Error mapeando propiedad comparable: {}", raw, e);
-            return null;
-        }
-    }
-
-    private File resolveJsonFile() {
-        // Ruta del JSON relativa al bot script
-        File botFile = new File(botPath);
-        return new File(botFile.getParent(), "json/resultados_scraping.json");
+    /**
+     * Devuelve la ruta absoluta al PDF generado por generador_pdf.py.
+     */
+    public Path getRutaPdf() {
+        File dataServiceDir = new File(mainPath).getParentFile();
+        return dataServiceDir.toPath().resolve("json/informe_tasacion.pdf");
     }
 }
