@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Informe de Tasación</title>
+        <style>
+            body { font-family: Helvetica, sans-serif; color: #c9b280; }
+            .header { background-color: #24441C; color: #c9b280; padding: 20px; text-align: center; font-size: 20px; }
+            .footer { text-align: center; }
+            .image { text-align: center; width: 250px; height: 250px; }
+            .content { margin: 30px; font-size: 16px;}
+            .text-italic { font-style: italic; }
+            .price-box { background-color: #24441C; padding: 15px; border-left: 5px solid  #1ABC9C; margin-bottom: 20px; }
+            .warning-box { background-color: #FDEDEC; padding: 15px; border-left: 5px solid #E74C3C; font-size: 15px; }
+        </style>
+    </head>
+    <body>
+        <div class="image">
+            <img src="https://i.imgur.com/BPSADsw.png" alt="Image of Evaluty logo">
+        </div>
+        <div class="header">
+            <h1>Informe de Valoración Inmobiliaria</h1>
+        </div>
+
+        <div class="content">
+            <h2>Datos de la Propiedad</h2>
+            <p><strong>Dirección:</strong> {{ direccion }}</p>
+            <p><strong>Superficie:</strong> {{ metros }} m²</p>
+            <p><strong>Casas analizadas en la zona:</strong> {{ testigos }}</p>
+
+            <div class="price-box">
+                <h3>Valor Estimado de Mercado: {{ precio_estimado }} €</h3>
+                <p>Precio medio en la zona: {{ precio_m2 }} €/m²</p>
+            </div>
+
+            {% if valor_hacienda %}
+            <div class="warning-box">
+                <h4>Aviso Legal - Valor de Referencia Catastral</h4>
+                <p>El valor mínimo <strong>simulado</strong> para esta vivienda a efectos fiscales (Hacienda) es de <strong>{{ valor_hacienda }} €</strong>. Vender por debajo de este valor puede conllevar requerimientos y sanciones por parte de la Agencia Tributaria.</p>
+                <p class="text-italic"><strong>Aviso:</strong> Esta valoración mínima es una estimación <strong>simulada</strong>, y no representa una valoración mínima del Catastro. Se require que visite la web oficial del Catastro con sus credenciales para verificar la valoración real.</p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="footer">
+            <footer>Todos los derechos reservados por Stephen Nicholas Jones De Giorgi, Kyle Lamm, Juan Montiel Fernández &copy; - Proyecto Intermodular DAW UNIR - 2026</footer>
+        </div>
+    </body>
+</html>

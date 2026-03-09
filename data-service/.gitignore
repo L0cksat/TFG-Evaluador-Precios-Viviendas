@@ -1,3 +1,7 @@
 venv/
 __pycache__/
 *.pyc
+screenshots/
+json/
+
+node_modules/
