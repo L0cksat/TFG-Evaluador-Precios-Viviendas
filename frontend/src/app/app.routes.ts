@@ -10,6 +10,10 @@ export const routes: Routes = [
         loadComponent: () => import('./evaluador/evaluador').then(m => m.EvaluadorComponent)
     },
     {
+        path:'login',
+        loadComponent: () => import('./login/login').then(m => m.LoginComponent)
+    },
+    {
         path:'**',
         redirectTo: ''
     }
