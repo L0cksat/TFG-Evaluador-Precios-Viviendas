@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 import time
 
 print("-" * 43)
@@ -73,6 +74,11 @@ wait = WebDriverWait(driver, 15)
 try:
     driver.get("https://www.trovimap.com")
 
+    nombre_archivo = "resultados_scraping.json"
+
+    ruta_json = os.path.join(carpeta_json, nombre_archivo)
+    
+
     
     # 1. ---POPUP DE CONSENTIMIENTO---
     try:
@@ -134,15 +140,17 @@ try:
     caja_busqueda.send_keys(direccion_input)
 
     # un pausa para que pueda ver que escribe en el navegador.
-    print("Estabilizando la página (2s)...")
+    print("Esperando a que aparezcan las surgencias de Trovimap (3s)...")
     print()
-    time.sleep(2)
+    time.sleep(3)
 
-    # A veces hay que pulsar ENTER, a veces hay que hacer clic en la sugerencia
+    # A veces hay que pulsar ENTER, a veces hay que hacer clic en la sugerencia, hemos dado cuenta que hay que darle a Arrow Down también
 
+    print("Seleccionando la primera sugerencia y pulsando ENTER...")
+    print()
+    caja_busqueda.send_keys(Keys.ARROW_DOWN)
+    time.sleep(0.5)
     caja_busqueda.send_keys(Keys.RETURN)
-    print("ENTER pulsado. Búsqueda enviada...")
-    print()
 
     # Aquí usamos este print para confirmar que estamos viendo casas en la cercanía de la 
     # driección de la vivienda introducida.
@@ -161,14 +169,34 @@ try:
     # 4. ---VERIFICACIÓN DE ÉXITO---
     print("Esperando carga de resultados..")
     print()
-    #Esperamos 5s para obtener los resultados
-    time.sleep(5)
+    #Cambiamos la espera estática por una espera más segura, asegurando de que los 
+    # anuncios/resultados de la búsqueda cargan correctamente.
 
-    # Añadimos os.path.join para unir carpeta con archivo de forma segura
-    ruta_captura = os.path.join(carpeta_img, "Captura_exito.png")
-    driver.save_screenshot(ruta_captura)
-    print(f"Captura guardada en {ruta_captura}")
-    print()
+    try:
+        print("Buscando anuncios en la página... (Damos un máximo de 15 segundos)")
+
+        anuncios = WebDriverWait(driver, 15).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "listing__container")))
+
+        print("¡Anuncios cargados correctamente!")
+
+        # Añadimos os.path.join para unir carpeta con archivo de forma segura
+        ruta_captura = os.path.join(carpeta_img, "Captura_exito.png")
+        driver.save_screenshot(ruta_captura)
+        print(f"Captura guardada en {ruta_captura}")
+        print()
+    except TimeoutException:
+        print("Error: La página tardó demasiado o no encontró resultados.")
+
+        datos_error = {
+            "status": "error",
+            "code": 408,
+            "mensaje": "Timeout: No se encontraron anuncios en el tiempo esperado."
+        }
+
+        with open(ruta_json, 'w', encoding='utf-8') as f:
+            json.dump([datos_error], f, ensure_ascii=False, indent=4)
+        driver.quit()
+        sys.exit(1)
 
     # 5. ---EXTRACCIÓN DE DATOS---
     
@@ -287,10 +315,6 @@ try:
 
     # 7. Exportación de los datos al formato JSON
 
-    nombre_archivo = "resultados_scraping.json"
-
-    ruta_json = os.path.join(carpeta_json, nombre_archivo)
-
     with open(ruta_json, 'w', encoding='utf-8') as f:
         # dump volca la lista al archivo
         # ensure_acii=False permite que se lean las tildes
@@ -301,6 +325,11 @@ try:
     print()
 
 except Exception as e:
+    # Si el error es una salida forzada (sys.exit), la dejamos pasar para
+    # que el programa se cierra
+    if isinstance(e, SystemExit):
+        raise
+
     print("Hubo un error en la búsqueda:", e)
     print()
     # Con este bloque nuestro robot hará una captura de pantalla en el momento que falla:
@@ -308,6 +337,7 @@ except Exception as e:
     driver.save_screenshot(ruta_captura)
     print(f"Captura de pantalla del error guardada en: {ruta_captura}")
     print()
+    sys.exit(1)
 
 finally:
     # 4 Cierre del navegador.

@@ -55,13 +55,23 @@ def ejecutar_bronca():
     print("\n--- PASO 1: Buscando testigos en el mercado ---")
     #Ahora hay que pasarle el nombre del archivo y las 3 variables en orden.
     comando_bot = [sys.executable, "bot_inmobiliario.py", direccion, metros, habitaciones]
-    subprocess.run(comando_bot)
+    resultado_bot = subprocess.run(comando_bot)
+
+    # El Cortafuegos 1: si el bot falla lo paramos todo
+    if resultado_bot.returncode != 0:
+        print(" Error crítico en el Scraper. Deteniendo la bronca.")
+        sys.exit(1)
 
     # Tercero, llamamos a nuestro querido calculo.py para que calcule el precio estimado.
     print("\n--- PASO 2: Calculando estimación de precio ---")
     # Recuerda que el calculo.py recibe la dirección en el índice 1 y los metros en el índice 2
     comando_calculo = [sys.executable, "calculo.py", direccion, metros]
-    subprocess.run(comando_calculo)
+    resultado_bot =subprocess.run(comando_calculo)
+
+    # El Cortafuegos 2
+    if resultado_bot.returncode != 0:
+        print("Error crítico en el Cálculo. Dentenidendo la bronca.")
+        sys.exit(1)
 
     # Cuarto, llamamos a generar el PDF para el enviarlo al backend
     print("\n--- PASO 3: Generando el PDF para el informe ---")
