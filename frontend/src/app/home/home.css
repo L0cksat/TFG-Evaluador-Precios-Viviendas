@@ -53,7 +53,10 @@
 .hero-image img {
   border-radius: 24px;
   box-shadow: .8rem .7rem 0px var(--accent-purple);
-  
+  /* Add these to ensure the image scales without breaking layout */
+  max-width: 100%;
+  height: auto; 
+  aspect-ratio: 1 / 1; /* Since your width/height are both 400 */
 }
 
 /* Mobile Responsiveness */
