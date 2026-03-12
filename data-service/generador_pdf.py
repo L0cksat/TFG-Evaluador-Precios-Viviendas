@@ -2,8 +2,10 @@ import json
 import os
 from jinja2 import Environment, FileSystemLoader
 from xhtml2pdf import pisa
+import sys
 
-def generar_pdf():
+
+def generar_pdf(direccion_oficial):
     # 1. Rutas de los archivos para poder trabajar
     ruta_json = os.path.join("json", "precio_estimado.json")
     ruta_template = "templates"
@@ -17,9 +19,9 @@ def generar_pdf():
         print("Error: No se encontró 'precio_estimado.json'. ¿Se ejecutó el cálculo?")
         return
     
-    # 3. Preparamos el diccionariom de variables para inyectar en el HTML
+    # 3. Preparamos el diccionario de variables para inyectar en el HTML
     contexto = {
-        "direccion": datos_tasacion.get("direccion", "Direccion no especificada."),
+        "direccion": direccion_oficial,
         "metros": datos_tasacion.get("metros_cuadrados", 0),
         "testigos": datos_tasacion.get("cantidad_casas_analizadas", 0),
         "precio_estimado": datos_tasacion.get("precio_estimado", 0),
@@ -45,4 +47,10 @@ def generar_pdf():
         print("Error al generar el PDF.")
 
 if __name__ == "__main__":
-    generar_pdf()
+    #Protegemos el código por si acaso faltan argumentos
+    if len(sys.argv) > 1:
+        direccion_capturada = sys.argv[1]
+    else:
+        direccion_capturada = "Direccion Desconocida"
+
+    generar_pdf(direccion_capturada)
