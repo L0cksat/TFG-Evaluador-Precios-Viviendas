@@ -4,10 +4,22 @@ import os
 import json
 
 def ejecutar_bronca():
+    # -- Protocolo de limpieza de archivos fantasma --
+    archivos_basura = [
+        os.path.join("json", "datos_extraidos_catastro.json"),
+        os.path.join("json", "resultados_scraping.json"),
+        os.path.join("json", "precio_estimado.json")
+    ]
+    for archivo in archivos_basura:
+        if os.path.exists(archivo):
+            os.remove(archivo)
+    # -- Fin del protocolo de limpieza --
+
     cantidad_argumentos = len(sys.argv)
 
     #Variables vacías que rellenaremos dependiendo del modo
-    direccion = ""
+    direccion_oficial = ""
+    direccion_busqueda = ""
     metros = ""
     habitaciones = ""
 
@@ -26,7 +38,8 @@ def ejecutar_bronca():
             with open(ruta_json_catastro, 'r', encoding='utf-8') as f:
                 datos_catastro = json.load(f)
                 if datos_catastro["status"] == "success":
-                    direccion = datos_catastro["direccion_oficial"]
+                    direccion_oficial = datos_catastro["direccion_oficial"]
+                    direccion_busqueda = datos_catastro["direccion_busqueda"]
                     metros = str(datos_catastro["metros_totales"])
                 else:
                     print("Error: El Catastro no devolvió datos válidos.")
@@ -37,7 +50,8 @@ def ejecutar_bronca():
     # MODO Básico 4 argumetnos (script + Dirección + Metros + Habs)
     elif cantidad_argumentos == 4:
         print("Modo Básico detectado: Entrada manual...")
-        direccion = sys.argv[1]
+        direccion_oficial = sys.argv[1]
+        direccion_busqueda = sys.argv[1]
         metros = sys.argv[2]
         habitaciones = sys.argv[3]
 
@@ -49,12 +63,13 @@ def ejecutar_bronca():
         
 
     print("---Bienvenido a EvalutyBot! ^_^---")
-    print(f"Iniciando tasación para: {direccion} | {metros}m2 | {habitaciones} habs.")
+    print(f"Iniciando tasación para: {direccion_oficial} | {metros}m2 | {habitaciones} habs.")
+    print(f"El bot buscará exactamente la cadena: '{direccion_busqueda}'")
 
     # Segundo, llamamos a nuestro querido bot_inmobiliario.py (Web Scraping).
     print("\n--- PASO 1: Buscando testigos en el mercado ---")
     #Ahora hay que pasarle el nombre del archivo y las 3 variables en orden.
-    comando_bot = [sys.executable, "bot_inmobiliario.py", direccion, metros, habitaciones]
+    comando_bot = [sys.executable, "bot_inmobiliario.py", direccion_busqueda, metros, habitaciones]
     resultado_bot = subprocess.run(comando_bot)
 
     # El Cortafuegos 1: si el bot falla lo paramos todo
@@ -65,8 +80,8 @@ def ejecutar_bronca():
     # Tercero, llamamos a nuestro querido calculo.py para que calcule el precio estimado.
     print("\n--- PASO 2: Calculando estimación de precio ---")
     # Recuerda que el calculo.py recibe la dirección en el índice 1 y los metros en el índice 2
-    comando_calculo = [sys.executable, "calculo.py", direccion, metros]
-    resultado_bot =subprocess.run(comando_calculo)
+    comando_calculo = [sys.executable, "calculo.py", direccion_busqueda, metros]
+    resultado_bot = subprocess.run(comando_calculo)
 
     # El Cortafuegos 2
     if resultado_bot.returncode != 0:
@@ -75,8 +90,8 @@ def ejecutar_bronca():
 
     # Cuarto, llamamos a generar el PDF para el enviarlo al backend
     print("\n--- PASO 3: Generando el PDF para el informe ---")
-    comando_generar_pdf = [sys.executable, "generador_pdf.py"]
-    subprocess.run(comando_generar_pdf)
+    comando_generar_pdf = [sys.executable, "generador_pdf.py", direccion_oficial]
+    resultado_bot = subprocess.run(comando_generar_pdf)
 
     print("\n Proceso completo. El Backend ya puede leer 'precio_estimado.json', y usar 'informe_tasacion.pdf'")
 

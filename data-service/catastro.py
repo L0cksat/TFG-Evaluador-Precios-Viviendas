@@ -39,17 +39,29 @@ def consultar_catastro():
                 nodo_direccion = raiz.find('.//*{http://www.catastro.meh.es/}ldt')
                 nodo_metros = raiz.find('.//*{http://www.catastro.meh.es/}sfc')
 
+                # 4.4 Pescamos las piezas de interés para el buscador de Trovimap
+                nodo_calle = raiz.find('.//*{http://www.catastro.meh.es/}nv')
+                nodo_municipio = raiz.find('.//*{http://www.catastro.meh.es/}nm')
+
                 if nodo_direccion is not None and nodo_metros is not None:
                     direccion_oficial = nodo_direccion.text
                     metros_totales = nodo_metros.text
 
-                    print(f"Dirección encontrada: {direccion_oficial}")
+                    #4.4.1 Se Ensambla la dirección usable por el bot
+                    if nodo_calle is not None and nodo_municipio is not None:
+                        direccion_busqueda = f"{nodo_calle.text} {nodo_municipio.text}"
+                    else:
+                        direccion_busqueda = direccion_oficial
+
+                    print(f"Dirección oficial (PDF): {direccion_oficial}")
+                    print(f"Direccion optimizada (Scraper): {direccion_busqueda}")
                     print(f"Metros encontrados: {metros_totales} m2")
 
-                    # 4.4 Empquetado de datos en el JSON
+                    # 4.5 Empquetado de datos en el JSON
                     datos_finales_catastro = {
                         "status": "success",
                         "direccion_oficial": direccion_oficial,
+                        "direccion_busqueda": direccion_busqueda,
                         "metros_totales": metros_totales
                     }
                 else:
@@ -60,7 +72,7 @@ def consultar_catastro():
                         "mensaje": "No se ha encontrado datos dentro del XML del Catastro."
                     }
 
-                # 4.4 Ahora lo guardamos en el JSON para que el calculo.py también puede aprovechar de ello.
+                # 4.6 Ahora lo guardamos en el JSON para que el calculo.py también puede aprovechar de ello.
                 carpeta_json = "json"
                 nombre_archivo = "datos_extraidos_catastro.json"
                 ruta_json = os.path.join(carpeta_json, nombre_archivo)
