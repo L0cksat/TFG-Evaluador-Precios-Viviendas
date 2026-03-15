@@ -13,9 +13,19 @@
 }
 
 .logo img {
-  aspect-ratio: 1 / 1; /* Forces a perfect square */
-  object-fit: cover;   /* Crops the edges to fill the square */
-  object-position: center; /* Determines which part of the image is kept */
+  aspect-ratio: 1 / 1; 
+  object-fit: cover;  
+  object-position: center; 
+}
+
+.logo-link {
+  cursor: pointer;
+  display: inline-block;
+  transition: opacity 0.2s ease;
+}
+
+.logo-link:hover {
+  opacity: 0.8;
 }
 
 .nav-links {

@@ -1,14 +1,12 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-// Matching your backend LoginRequest DTO
 export interface LoginRequest {
   email: string;
   password: string;
 }
 
-// Matching your backend AuthResponse DTO
 export interface AuthResponse {
   token: string;
   email: string;
@@ -16,16 +14,27 @@ export interface AuthResponse {
   role: string;
 }
 
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  nombre: string;
+  apellidos: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  // Update the port if your Spring Boot app runs on a different one
-  private apiUrl = 'http://localhost:8080/api/auth/login'; 
+  private loginUrl = 'http://localhost:8080/api/auth/login'; 
+  private registerUrl = 'http://localhost:8080/api/auth/register';
 
   constructor(private http: HttpClient) {}
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.apiUrl, credentials);
+    return this.http.post<AuthResponse>(this.loginUrl, credentials);
+  }
+
+  register(userData: RegisterRequest): Observable<any> {
+    return this.http.post(this.registerUrl, userData);
   }
 }

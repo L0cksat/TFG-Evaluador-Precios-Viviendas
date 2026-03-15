@@ -14,6 +14,14 @@ export const routes: Routes = [
         loadComponent: () => import('./login/login').then(m => m.LoginComponent)
     },
     {
+        path: 'register',
+        loadComponent: () => import('./register/register').then(m => m.RegisterComponent)
+    },
+    {
+        path: 'history',
+        loadComponent: () => import('./history/history').then(m => m.HistoryComponent)
+    },
+    {
         path:'**',
         redirectTo: ''
     }
