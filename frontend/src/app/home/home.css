@@ -22,24 +22,6 @@
   color: #444;
 }
 
-.cta-group {
-  display: flex;
-  gap: 10px;
-  background: var(--gray-light);
-  padding: 10px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.cta-group input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  padding: 0 1rem;
-  font-size: 1rem;
-  outline: none;
-}
-
 .btn-estimate {
   background: var(--primary-light);
   color: var(--deep-forest);

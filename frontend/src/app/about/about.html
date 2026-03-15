@@ -1,0 +1,31 @@
+<div class="about-wrapper">
+  <div class="about-container">
+    <h1>Sobre <span class="highlight">Nosotros</span></h1>
+    <p class="subtitle">El equipo detrás de Evaluty, transformando el mercado inmobiliario.</p>
+
+    <div class="team-grid">
+      @for (member of team; track member.nombre) {
+        <section class="team-section">
+          <div class="profile-card">
+            <img [src]="member.imagen" [alt]="member.nombre" class="profile-img">
+            <h3>{{ member.nombre }}</h3>
+            <span class="puesto">{{ member.puesto }}</span>
+            <p class="bio">{{ member.descripcion }}</p>
+            
+            <div class="social-links">
+              @if (member.github) {
+                <a [href]="member.github" target="_blank" class="link-icon">GitHub</a>
+              }
+              @if (member.linkedin) {
+                <a [href]="member.linkedin" target="_blank" class="link-icon">LinkedIn</a>
+              }
+              @if (member.website) {
+                <a [href]="member.website" target="_blank" class="link-icon">Web</a>
+              }
+            </div>
+          </div>
+        </section>
+      }
+    </div>
+  </div>
+</div>

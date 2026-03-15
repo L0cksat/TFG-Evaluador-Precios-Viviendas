@@ -1,16 +1,35 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+// Interface matching the backend's ValuationRequest.java
+export interface ValuationRequest {
+  direccion: string;
+  metrosCuadrados: number; // Must be 'metrosCuadrados', not 'metros'
+  habitaciones: number;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class InmobilarioBuscarService {
-  
+  // Match the port of your Spring Boot backend
+  private apiUrl = 'http://localhost:8080/api/valoraciones';
+
   constructor(private http: HttpClient) {}
 
-  botInmobilario(direccion: string, metros: number, habitaciones: number) {
-    // TODO: Crear endpoint para llamar el metodo de Python
-    //return this.http.get(`http://localhost:8000/run-search?address=${direccion}?metros=~${metros}?habitaciones=${habitaciones}`);
-    console.log('Values from python bot component: direccion ' + direccion + ' metros: '+ metros + ' habitaciones: ' + habitaciones);
+  botInmobilario(direccion: string, metros: number, habitaciones: number): Observable<any> {
+    const payload: ValuationRequest = {
+      direccion: direccion,
+      metrosCuadrados: metros,
+      habitaciones: habitaciones
+    };
+
+    // Retrieve the token saved during login
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    // Call the POST /api/valoraciones endpoint
+    return this.http.post<any>(this.apiUrl, payload, { headers });
   }
 }

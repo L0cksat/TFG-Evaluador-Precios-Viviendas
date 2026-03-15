@@ -1,0 +1,47 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+interface TeamMember {
+  nombre: string;
+  puesto: string;
+  descripcion: string;
+  imagen: string;
+  github?: string;
+  website?: string;
+  linkedin?: string;
+}
+
+@Component({
+  selector: 'app-about',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './about.html',
+  styleUrl: './about.css'
+})
+export class AboutComponent {
+  team: TeamMember[] = [
+    {
+      nombre: 'Kyle Lamm',
+      puesto: 'Desarrollador Full Stack',
+      descripcion: 'Me llamo Kyle y hace poco decidí aceptar el reto de dar un giro a mi carrera y adentrarme en el apasionante mundo de la tecnología. Ahora mismo estoy terminando mi formación profesional en DAW con UNIR y estoy deseando dar por concluido este primer paso de mi trayectoria para ver adónde me lleva. En mi tiempo libre, me gusta cocinar platos deliciosos en casa y jugar al ajedrez online.',
+      imagen: 'images/LammKyle.jpg',
+      github: 'https://github.com/Keeper90L',
+      linkedin: 'https://www.linkedin.com/in/kyle-lamm-2496242bb/'
+    },
+    {
+      nombre: 'Nombre Compañero 1',
+      puesto: 'Especialista en Datos',
+      descripcion: 'Descripción sobre su contribución al modelo de valoración o bot inmobiliario.',
+      imagen: 'aimages/perfil2.jpg',
+      github: 'https://github.com/usuario2',
+      website: 'https://tuweb.com'
+    },
+    {
+      nombre: 'Nombre Compañero 2',
+      puesto: 'Diseñador UI/UX',
+      descripcion: 'Descripción sobre el diseño de la interfaz y la experiencia de usuario de Evaluty.',
+      imagen: 'assets/images/perfil3.jpg',
+      linkedin: 'https://linkedin.com/in/usuario3'
+    }
+  ];
+}

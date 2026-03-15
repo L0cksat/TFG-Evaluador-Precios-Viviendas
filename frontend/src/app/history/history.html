@@ -1,0 +1,26 @@
+<div class="history-wrapper">
+  <div class="history-card">
+    <h1>Mis <span class="highlight">Búsquedas</span></h1>
+    <p>Consulta el historial de tus valoraciones inmobiliarias.</p>
+
+    <div class="history-list">
+      @for (item of valuations; track item.id) {
+        <div class="history-item">
+          <div class="item-info">
+            <strong>{{ item.direccion }}</strong>
+            <span>{{ item.fecha | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="item-price">
+            {{ item.precioEstimado | currency:'EUR' }}
+          </div>
+        </div>
+      } @empty {
+        <p class="empty-msg">Aún no has realizado ninguna búsqueda.</p>
+      }
+    </div>
+
+    <button class="btn-new-search" (click)="goToEvaluador()">
+      Nueva Búsqueda
+    </button>
+  </div>
+</div>

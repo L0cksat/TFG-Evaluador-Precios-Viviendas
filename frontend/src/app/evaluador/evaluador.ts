@@ -12,8 +12,14 @@ import { HomeDataService } from '../services/home-data';
 })
 export class EvaluadorComponent implements OnInit {
   formEvaluacion!: FormGroup;
+  isLoading: boolean = false;
+  resultadoValoracion: any = null; // Variable to hold the backend response
 
-  constructor(private fb: FormBuilder, private ibs: InmobilarioBuscarService, private hds: HomeDataService) {}
+  constructor(
+    private fb: FormBuilder, 
+    private ibs: InmobilarioBuscarService, 
+    private hds: HomeDataService
+  ) {}
 
   ngOnInit(): void {
     const direccionDeHome = this.hds.direccion;
@@ -26,15 +32,26 @@ export class EvaluadorComponent implements OnInit {
   }
 
   onSubmit() {
-    const dir = this.formEvaluacion.value.direccion;
-    const metros = this.formEvaluacion.value.metros;
-    const habitaciones = this.formEvaluacion.value.habitaciones
-    
-    console.log(dir + ':' + metros + ':' + habitaciones)
     if (this.formEvaluacion.valid) {
-
-      this.ibs.botInmobilario(dir, metros, habitaciones);
+      const dir = this.formEvaluacion.value.direccion;
+      const metros = this.formEvaluacion.value.metros;
+      const habitaciones = this.formEvaluacion.value.habitaciones;
       
+      this.isLoading = true;
+
+      this.ibs.botInmobilario(dir, metros, habitaciones).subscribe({
+        next: (response) => {
+          console.log('Valoración procesada exitosamente:', response);
+          this.resultadoValoracion = response;
+          this.isLoading = false;
+          
+          // Optionally: Show a success message or display the data in your HTML
+        },
+        error: (err) => {
+          console.error('Error al conectar con el backend:', err);
+          this.isLoading = false;
+        }
+      });
     }
   }
 }

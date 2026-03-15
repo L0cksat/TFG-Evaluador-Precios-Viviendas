@@ -1,0 +1,45 @@
+<div class="register-wrapper">
+  <div class="register-card">
+    <h1>Crea tu <span class="highlight">Cuenta</span></h1>
+    <p>Regístrate para empezar a evaluar viviendas.</p>
+
+    <form class="register-form" (ngSubmit)="onRegister()">
+      
+      <div class="form-group">
+        <label>Nombre</label>
+        <div class="input-container">
+          <input type="text" name="nombre" [(ngModel)]="userData.nombre" placeholder="Tu nombre" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Apellidos</label>
+        <div class="input-container">
+          <input type="text" name="apellidos" [(ngModel)]="userData.apellidos" placeholder="Tus apellidos" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-container">
+          <input type="email" name="email" [(ngModel)]="userData.email" placeholder="ejemplo@correo.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <div class="input-container">
+          <input type="password" name="password" [(ngModel)]="userData.password" placeholder="Mínimo 6 caracteres" required>
+        </div>
+      </div>
+
+      @if (errorMessage) {
+        <div class="error-msg">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <button type="submit" class="btn-register">Registrarse</button>
+    </form>
+  </div>
+</div>
