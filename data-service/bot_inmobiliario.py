@@ -310,7 +310,7 @@ try:
     print("-" * 50)
     print(f"Se han extraído {len(datos_comparables)} propiedades para el algoritmo.")
     print("-" * 50)
-    print(datos_comparables) # Esto es lo que luego exportaremos al Excel o a otra parte de la app para el calcúlo.
+    #print(datos_comparables) # Esto es lo que luego exportaremos al Excel o a otra parte de la app para el calcúlo.
     print("-" * 50)
 
     # 7. Exportación de los datos al formato JSON
