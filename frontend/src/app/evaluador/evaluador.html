@@ -46,7 +46,7 @@
         Valor estimado: <strong>{{ resultadoValoracion.precioEstimado }} €</strong>
       </p>
 
-      <a href="'http://localhost:8080' + resultadoValoracion.urlInforme" target="_blank" class="btn btn-success">
+      <a [href]="'http://localhost:8080' + resultadoValoracion.urlInforme" target="_blank" class="btn btn-success">
         Ver / Descargar Informe PDF
       </a>
     </div>
