@@ -40,6 +40,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     // Rutas públicas
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/valoraciones").permitAll()
                     // Todo lo demás requiere autenticación
                     .anyRequest().authenticated()
             )

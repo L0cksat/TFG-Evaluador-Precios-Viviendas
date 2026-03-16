@@ -35,8 +35,13 @@ public class ValuationController {
             return ResponseEntity.badRequest().build();
         }
 
+        String username = null;
+        if (userDetails !=null){
+            username = userDetails.getUsername();
+        }
+
         ValuationResponse response = valuationService.solicitarValoracion(
-                request, userDetails.getUsername());
+                request, username);
 
         return ResponseEntity.ok(response);
     }
