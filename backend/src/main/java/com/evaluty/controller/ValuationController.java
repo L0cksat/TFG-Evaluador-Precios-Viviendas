@@ -59,7 +59,7 @@ public class ValuationController {
      * GET /api/valoraciones/pdf
      * Muestra el PDF del informe en el frontend
      */
-    @GetMapping("/api/valoraciones/pdf")
+    @GetMapping("/descargar-pdf")
     public ResponseEntity<Resource> descargarPdf() throws Exception {
         Path rutaPdf = pythonBotService.getRutaPdf();
         Resource recurso = new UrlResource(rutaPdf.toUri());
