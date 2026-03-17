@@ -15,7 +15,7 @@ export interface ValuationResponse {
   providedIn: 'root',
 })
 export class ValuationService {
-  private apiUrl = 'http://localhost:8080/api/valuations';
+  private apiUrl = 'http://localhost:8080/api/valoraciones';
 
   constructor(private http: HttpClient) {}
 
@@ -29,6 +29,6 @@ export class ValuationService {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
     
-    return this.http.get<ValuationResponse[]>(`${this.apiUrl}/user`, { headers });
+    return this.http.get<ValuationResponse[]>(this.apiUrl, { headers });
   }
 }

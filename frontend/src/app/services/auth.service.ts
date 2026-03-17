@@ -44,9 +44,14 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
+  getNombreUsuario(): string | null {
+    return localStorage.getItem('nombre');
+  }
+
   logout(): void {
     // Deletes the token and redirects to the home or the login page
     localStorage.removeItem('token');
+    localStorage.removeItem('nombre');
     this.router.navigate(['/login']);
   }
 }

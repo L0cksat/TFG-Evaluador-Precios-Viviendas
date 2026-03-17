@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ValuationService, ValuationResponse } from '../services/valuation';
 import { DatePipe, CurrencyPipe } from '@angular/common';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-history',
@@ -15,13 +16,18 @@ export class HistoryComponent implements OnInit {
 
   constructor(
     private valuationService: ValuationService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    public authService: AuthService
   ) {}
 
   ngOnInit() {
     this.valuationService.getUserValuations().subscribe({
-      next: (data) => this.valuations = data,
-      error: (err) => console.error('Error fetching history:', err)
+      next: (data) => {
+        this.valuations = data
+        this.cdr.detectChanges()
+      }, 
+      error: (err) => console.error('Error fetching history:', err),
     });
   }
 

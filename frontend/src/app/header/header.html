@@ -5,6 +5,9 @@
         <img ngSrc="images/logo1.webp" height="100" width="150" alt="Evaluty Logo" />
       </a>
     </div>
+    @if (authService.isLoggedIn()) {
+      <p>¡Hola <span class="highlight">{{ authService.getNombreUsuario() }}</span>!</p>
+    }
     <ul class="nav-links">
       <li><button class="btn-login" routerLink="/about">Nosotros</button></li>
       @if (!authService.isLoggedIn()) {
