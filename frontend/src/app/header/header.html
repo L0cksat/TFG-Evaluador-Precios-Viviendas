@@ -1,14 +1,21 @@
 <header class="header">
   <nav class="container nav-wrapper">
     <div class="logo">
-  <a routerLink="/" class="logo-link">
-    <img ngSrc="images/logo1.webp" height="100" width="150"alt="Evaluty Logo">
-  </a>
-</div>
+      <a routerLink="/" class="logo-link">
+        <img ngSrc="images/logo1.webp" height="100" width="150" alt="Evaluty Logo" />
+      </a>
+    </div>
     <ul class="nav-links">
       <li><button class="btn-login" routerLink="/about">Nosotros</button></li>
-      <li><button class="btn-login" routerLink="/login">Login</button></li>
-      <li><button class="btn-signup" routerLink="/register">Regístrate</button></li>
+      @if (!authService.isLoggedIn()) {
+        <li><button class="btn-login" routerLink="/login">Login</button></li>
+        <li><button class="btn-signup" routerLink="/register">Regístrate</button></li>
+      }
+      @else {
+        <li><button class="btn-login" routerLink="/history">Mi Historial</button></li>
+
+        <li><button class="btn-signup" (click)="authService.logout()">Cerrar Sesión</button></li>
+      }
     </ul>
   </nav>
 </header>
