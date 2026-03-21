@@ -27,7 +27,14 @@ export class InmobilarioBuscarService {
 
     // Retrieve the token saved during login
     const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    // Added the base empty headers
+    let headers = new HttpHeaders()
+
+    // Added if to check to see if the token truely exists
+    if (token && token !== 'null'){
+      headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    }
 
     // Call the POST /api/valoraciones endpoint
     return this.http.post<any>(this.apiUrl, payload, { headers });

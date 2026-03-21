@@ -29,12 +29,12 @@ export class AboutComponent {
       linkedin: 'https://www.linkedin.com/in/kyle-lamm-2496242bb/'
     },
     {
-      nombre: 'Nombre Compañero 1',
-      puesto: 'Especialista en Datos',
-      descripcion: 'Descripción sobre su contribución al modelo de valoración o bot inmobiliario.',
-      imagen: 'aimages/perfil2.jpg',
-      github: 'https://github.com/usuario2',
-      website: 'https://tuweb.com'
+      nombre: 'Stephen Nicholas Jones De Giorgi',
+      puesto: 'Desarrollador Full Stack, creación de microservicio Python',
+      descripcion: '¡Hola! Soy Stephen Nicholas Jones De Giorgi (Bueno me puedes llamar Nicky) y siempre he estado enamorado de la tecnología, también tomé la decisión de cambiar de aires y embarcar en la FP de DAW, que estoy en la fase final de la formación y con ganas de trabajar en este sector. Me encanta la escritura, los videojuegos, la programación y los deportes. Soy padre de dos hijos',
+      imagen: 'images/NickyJones.jpg',
+      github: 'https://github.com/L0cksat',
+      website: 'https://stephennicholasjones.com/'
     },
     {
       nombre: 'Nombre Compañero 2',

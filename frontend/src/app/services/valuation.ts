@@ -21,7 +21,14 @@ export class ValuationService {
 
   getUserValuations(): Observable<ValuationResponse[]> {
     const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    let headers = new HttpHeaders(); // Added empty base headers
+
+    // Added only adds token if it truely exists.
+    if (token && token !== 'null'){
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+    
     return this.http.get<ValuationResponse[]>(`${this.apiUrl}/user`, { headers });
   }
 }
