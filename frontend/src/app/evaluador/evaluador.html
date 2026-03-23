@@ -3,12 +3,20 @@
 
   <form [formGroup]="formEvaluacion">
     <div class="cta-group">
-      <label>Dirección</label>
-      <input type="text" formControlName="direccion" />
-      @if (formEvaluacion.get('direccion')?.invalid && formEvaluacion.get('direccion')?.touched) {
-        <div class="text-danger">La dirección es obligatoria.</div>
-      }
-    </div>
+  <label>Dirección</label>
+  <input type="text" formControlName="direccion" placeholder="Ej: Calle Gran Via 23, Sevilla" />
+  
+  @if (formEvaluacion.get('direccion')?.touched) {
+    @if (formEvaluacion.get('direccion')?.errors?.['required']) {
+      <div class="text-danger">La dirección es obligatoria.</div>
+    }
+    @if (formEvaluacion.get('direccion')?.errors?.['pattern']) {
+      <div class="text-danger">
+        Formato incorrecto. Debe ser: Nombre de calle [Número], [Ciudad]. ie. Calle Gran Via 23, Sevilla
+      </div>
+    }
+  }
+</div>
 
     <div class="cta-group">
       <label>Metros Cuadrados</label>
