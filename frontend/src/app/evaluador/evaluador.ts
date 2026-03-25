@@ -22,49 +22,80 @@ export class EvaluadorComponent implements OnInit {
     private cdr: ChangeDetectorRef //injected the change detector ref to handle the HTML changes.
   ) {}
 
-  // evaluador.ts
+ // Add 'valuationMode' to your class properties
+valuationMode: 'basic' | 'pro' = 'basic';
+
 ngOnInit(): void {
-  const direccionDeHome = this.hds.direccion;
-  // Define the regex pattern
   const addressPattern = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s\.]+ \d+[a-zA-Z]?, [a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/;
+  // Catastral references in Spain are usually 20 alphanumeric characters
+  const rcPattern = /^[0-9A-Z]{20}$/;
 
   this.formEvaluacion = this.fb.group({
-    direccion: [
-      direccionDeHome, 
-      [
-        Validators.required, 
-        Validators.pattern(addressPattern)
-      ]
-    ],
+    direccion: [this.hds.direccion, [Validators.required, Validators.pattern(addressPattern)]],
+    referenciaCatastral: ['', [Validators.pattern(rcPattern)]], // New field
     metros: ['', [Validators.required, Validators.min(1)]],
     habitaciones: ['', [Validators.required, Validators.min(0)]]
   });
 }
 
+// Helper to switch modes and update validators
+setMode(mode: 'basic' | 'pro') {
+  this.valuationMode = mode;
+  const dirCtrl = this.formEvaluacion.get('direccion');
+  const rcCtrl = this.formEvaluacion.get('referenciaCatastral');
+  const metrosCtrl = this.formEvaluacion.get('metros');
+
+  if (mode === 'pro') {
+    rcCtrl?.setValidators([Validators.required, Validators.pattern(/^[0-9A-Z]{20}$/)]);
+    dirCtrl?.clearValidators();
+    metrosCtrl?.clearValidators();
+  } else {
+    rcCtrl?.clearValidators();
+    dirCtrl?.setValidators([Validators.required, Validators.pattern(/.../ )]); // use your pattern
+    metrosCtrl?.setValidators([Validators.required, Validators.min(1)]);
+  }
+  
+  rcCtrl?.updateValueAndValidity();
+  dirCtrl?.updateValueAndValidity();
+  metrosCtrl?.updateValueAndValidity();
+}
+
+  // frontend/src/app/evaluador/evaluador.ts
+
   onSubmit() {
     if (this.formEvaluacion.valid) {
-      const dir = this.formEvaluacion.value.direccion;
-      const metros = this.formEvaluacion.value.metros;
-      const habitaciones = this.formEvaluacion.value.habitaciones;
-      
       this.isLoading = true;
-      this.resultadoValoracion = null; // We reset the resultadoValoracion just in case
-      this.cdr.detectChanges(); // We fgrce the visual changes at the start of loading.
+      this.resultadoValoracion = null;
+      this.cdr.detectChanges();
 
-      this.ibs.botInmobilario(dir, metros, habitaciones).subscribe({
+      const formValues = this.formEvaluacion.value;
+      let payload: any;
+
+      if (this.valuationMode === 'basic') {
+        payload = {
+          direccion: formValues.direccion,
+          metrosCuadrados: formValues.metros,
+          habitaciones: formValues.habitaciones
+        };
+      } else {
+        payload = {
+          referenciaCatastral: formValues.referenciaCatastral,
+          habitaciones: formValues.habitaciones
+        };
+      }
+
+      // Use the updated service method passing the payload object
+      this.ibs.botInmobilario(payload).subscribe({
         next: (response) => {
           console.log('Valoración procesada exitosamente:', response);
           this.resultadoValoracion = response;
           this.isLoading = false;
-
-          this.cdr.detectChanges(); //Here we force Angular to show the HTML again
-          
-          // Optionally: Show a success message or display the data in your HTML
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Error al conectar con el backend:', err);
           this.isLoading = false;
-          this.cdr.detectChanges(); // We visual update it in the case of an error
+          this.cdr.detectChanges();
         }
       });
     }
