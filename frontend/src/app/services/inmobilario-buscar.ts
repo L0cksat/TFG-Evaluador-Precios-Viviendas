@@ -7,6 +7,7 @@ export interface ValuationRequest {
   direccion: string;
   metrosCuadrados: number; // Must be 'metrosCuadrados', not 'metros'
   habitaciones: number;
+  referenciaCatastral?: string;
 }
 
 @Injectable({
@@ -18,13 +19,8 @@ export class InmobilarioBuscarService {
 
   constructor(private http: HttpClient) {}
 
-  botInmobilario(direccion: string, metros: number, habitaciones: number): Observable<any> {
-    const payload: ValuationRequest = {
-      direccion: direccion,
-      metrosCuadrados: metros,
-      habitaciones: habitaciones
-    };
-
+  botInmobilario(request: ValuationRequest): Observable<any> {
+    
     // Retrieve the token saved during login
     const token = localStorage.getItem('token');
 
@@ -37,6 +33,6 @@ export class InmobilarioBuscarService {
     }
 
     // Call the POST /api/valoraciones endpoint
-    return this.http.post<any>(this.apiUrl, payload, { headers });
+    return this.http.post<any>(this.apiUrl, request, { headers });
   }
 }
