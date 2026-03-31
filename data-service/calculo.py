@@ -35,7 +35,7 @@ for casa in datos_casas:
         ubicacion = casa.get('ubicacion', '')
 
         #Aquí va el filtro
-        if "Ascensor" in ubicacion:
+        if "con Ascensor" in ubicacion:
             print(f"Descartando casa por ubicación inválida: {ubicacion}")
             continue
 
