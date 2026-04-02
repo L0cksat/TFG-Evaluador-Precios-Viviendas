@@ -3,6 +3,7 @@ import requests
 import os
 import json
 import xml.etree.ElementTree as ET
+from requests.exceptions import Timeout, RequestException
 
 def consultar_catastro():
     try:
@@ -18,61 +19,99 @@ def consultar_catastro():
     url = f"http://ovc.catastro.meh.es/ovcservweb/OVCSWLocalizacionRC/OVCCallejero.asmx/Consulta_DNPRC?Provincia=&Municipio=&RC={referencia_catastral}"
 
     # Hacemos la llamada HTTP GET
-    respuesta = requests.get(url)
+    try:
+        respuesta = requests.get(url, timeout=10)
+    
+        #4. Comprobamos si el Gobierno nos ha respondido con un 200 OK
+        if respuesta.status_code == 200:
+            print("¡Conexión exitosa con el Gobierno ;)!")
+            #Aquí imprimieremos el XML en crudo para verlo con mis propios ojos
+            print(respuesta.text)
 
-    #4. Comprobamos si el Gobierno nos ha respondido con un 200 OK
-    if respuesta.status_code == 200:
-        print("¡Conexión exitosa con el Gobierno ;)!")
-        #Aquí imprimieremos el XML en crudo para verlo con mis propios ojos
-        print(respuesta.text)
+            # 4.1 convertimos el texto en un "Árbol" navegable
+            raiz = ET.fromstring(respuesta.text)
 
-        # 4.1 convertimos el texto en un "Árbol" navegable
-        raiz = ET.fromstring(respuesta.text)
+            # 4.2 Definimos el Namespace del Gobierno (vital para que funcione)
+            #espacios = {'cat': 'http://www.catastro.meh.es/'}
 
-        # 4.2 Definimos el Namespace del Gobierno (vital para que funcione)
-        #espacios = {'cat': 'http://www.catastro.meh.es/'}
+            try:
+                # 4.3 pescamos los datos usuando XPath
+                nodo_direccion = raiz.find('.//*{http://www.catastro.meh.es/}ldt')
+                nodo_metros = raiz.find('.//*{http://www.catastro.meh.es/}sfc')
 
-        try:
-            # 4.3 pescamos los datos usuando XPath
-            nodo_direccion = raiz.find('.//*{http://www.catastro.meh.es/}ldt')
-            nodo_metros = raiz.find('.//*{http://www.catastro.meh.es/}sfc')
+                # 4.4 Pescamos las piezas de interés para el buscador de Trovimap
+                nodo_calle = raiz.find('.//*{http://www.catastro.meh.es/}nv')
+                nodo_municipio = raiz.find('.//*{http://www.catastro.meh.es/}nm')
 
-            if nodo_direccion is not None and nodo_metros is not None:
-                direccion_oficial = nodo_direccion.text
-                metros_totales = nodo_metros.text
+                if nodo_direccion is not None and nodo_metros is not None:
+                    direccion_oficial = nodo_direccion.text
+                    metros_totales = nodo_metros.text
 
-                print(f"Dirección encontrada: {direccion_oficial}")
-                print(f"Metros encontrados: {metros_totales} m2")
+                    #4.4.1 Se Ensambla la dirección usable por el bot
+                    if nodo_calle is not None and nodo_municipio is not None:
+                        direccion_busqueda = f"{nodo_calle.text} {nodo_municipio.text}"
+                    else:
+                        direccion_busqueda = direccion_oficial
 
-            # 4.4 Empquetado de datos en el JSON
-                datos_finales_catastro = {
-                    "status": "success",
-                    "direccion_oficial": direccion_oficial,
-                    "metros_totales": metros_totales
-                }
-            else:
-                print("No se ha encontrado datos suficientes para la extracción.")
-                datos_finales_catastro = {
-                    "status": "error",
-                    "code": 404,
-                    "mensaje": "No se ha encontrado datos dentro del XML del Catastro."
-                }
+                    print(f"Dirección oficial (PDF): {direccion_oficial}")
+                    print(f"Direccion optimizada (Scraper): {direccion_busqueda}")
+                    print(f"Metros encontrados: {metros_totales} m2")
 
-            # 4.4 Ahora lo guardamos en el JSON para que el calculo.py también puede aprovechar de ello.
-            carpeta_json = "json"
-            nombre_archivo = "datos_extraidos_catastro.json"
-            ruta_json = os.path.join(carpeta_json, nombre_archivo)
+                    # 4.5 Empquetado de datos en el JSON
+                    datos_finales_catastro = {
+                        "status": "success",
+                        "direccion_oficial": direccion_oficial,
+                        "direccion_busqueda": direccion_busqueda,
+                        "metros_totales": metros_totales
+                    }
+                else:
+                    print("No se ha encontrado datos suficientes para la extracción.")
+                    datos_finales_catastro = {
+                        "status": "error",
+                        "code": 404,
+                        "mensaje": "No se ha encontrado datos dentro del XML del Catastro."
+                    }
 
-            with open(ruta_json, 'w', encoding='utf-8') as f:
-                json.dump(datos_finales_catastro, f, ensure_ascii=False, indent=4)
+                # 4.6 Ahora lo guardamos en el JSON para que el calculo.py también puede aprovechar de ello.
+                carpeta_json = "json"
+                nombre_archivo = "datos_extraidos_catastro.json"
+                ruta_json = os.path.join(carpeta_json, nombre_archivo)
+
+                os.makedirs(carpeta_json, exist_ok=True)
+
+                with open(ruta_json, 'w', encoding='utf-8') as f:
+                    json.dump(datos_finales_catastro, f, ensure_ascii=False, indent=4)
             
-            print(f"Se ha guardado el JSON con éxito: {nombre_archivo}")
-            print(f"El archivo ha sido guardado con éxito en la ruta: {ruta_json}")
+                print(f"Se ha guardado el JSON con éxito: {nombre_archivo}")
+                print(f"El archivo ha sido guardado con éxito en la ruta: {ruta_json}")
 
-        except Exception as e:
-            print(f"Error procesando el XML: {e}") 
-    else:
-        print(f"Error al conectar con el Catatstro. Código {respuesta.status_code}")
+            except Exception as e:
+                print(f"Error procesando el XML: {e}") 
+        else:
+            print(f"Error al conectar con el Catatstro. Código {respuesta.status_code}")
+    except Timeout:
+        print("Error: El Catastro ha tardado demasiado en responder (Timeout).")
+        datos_error = {
+            "status": "error",
+            "code": 408,
+            "mensaje": "Tiempo de espera agotado al conectar con el Catastro."
+        }
+        guardar_error_json(datos_error)
+        sys.exit(1)
+    except RequestException as e:
+        print(f"Error de conexión con el Catastro: {e}")
+        datos_error = {
+            "status": "error",
+            "code": 500,
+            "mensaje": "Error de red al intentar conectar con el Catastro."
+        }
+        guardar_error_json(datos_error)
+        sys.exit(1)
+
+def guardar_error_json(datos):
+    ruta_json = os.path.join("json", "datos_extraidos_catastro.json")
+    with open(ruta_json, 'w', encoding='utf-8') as f:
+        json.dump(datos, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     consultar_catastro()

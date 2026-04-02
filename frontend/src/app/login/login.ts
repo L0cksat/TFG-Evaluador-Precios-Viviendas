@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
 import { AuthService, LoginRequest } from '../services/auth.service';
 
 @Component({
@@ -22,6 +21,7 @@ export class LoginComponent {
       next: (response) => {
         // Here you typically save the token to localStorage/sessionStorage
         localStorage.setItem('token', response.token);
+        localStorage.setItem('nombre', response.nombre);
         
         // Redirect to home or dashboard after successful login
         this.router.navigate(['/']); 

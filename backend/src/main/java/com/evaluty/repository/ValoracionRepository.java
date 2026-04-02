@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ValoracionRepository extends MongoRepository<Valoracion, String> {
     List<Valoracion> findByUserId(String userId);
-    List<Valoracion> findByNumeroCatastro(String numeroCatastro);
+    List<Valoracion> findByReferenciaCatastral(String referenciaCatastral);
 }
