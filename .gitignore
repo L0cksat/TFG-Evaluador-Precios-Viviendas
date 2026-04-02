@@ -9,6 +9,7 @@ node_modules/
 .classpath
 .settings/
 .factorypath
+**/org.eclipse.core.resources.prefs
 
 # Ignore Maven build output
 target/

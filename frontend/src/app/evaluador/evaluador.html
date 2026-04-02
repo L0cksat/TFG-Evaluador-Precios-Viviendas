@@ -103,9 +103,11 @@
     </button>
   </form>
 
-  <h3>O busque en el mapa abajo:</h3>
+  @if(valuationMode === 'basic'){
+    <h3>O busque en el mapa abajo:</h3>
   <div id="map" #map style="height: 400px; width: 100%;"></div>
-
+  }
+  
   @if (isLoading) {
     <div class="loading-spinner text-center mt-4">
       <div class="spinner-border text-primary" role="status"></div>
