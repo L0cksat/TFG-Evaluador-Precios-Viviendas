@@ -61,13 +61,16 @@ Además, incluye herramientas para calcular el **valor fiscal mínimo**, ayudand
 ## 🏗️ Architecture
 
 El sistema sigue una arquitectura basada en microservicios:
+
+```text
 Frontend (Angular)
-↓
+        ↓
 Backend API (Spring Boot)
-↓
+        ↓
 Python Microservice (Scraping & Processing)
-↓
+        ↓
 MongoDB
+```
 
 
 ### 🔄 Workflow
@@ -110,7 +113,7 @@ cd evaluty
 ```
 ---
 
-## Run Frontend
+### Run Frontend
 ```bash
 cd frontend
 npm install
@@ -119,7 +122,7 @@ ng serve
 ```
 ---
 
-## Run Backend
+### Run Backend
 ```bash
 cd backend
 mvn spring-boot:run
@@ -127,7 +130,7 @@ mvn spring-boot:run
 ```
 ---
 
-## Run Microservice
+### Run Microservice
 ```bash
 cd microservice
 python app.py
@@ -136,34 +139,42 @@ python app.py
 
 ---
 
-# 📂 Project Structure
-/frontend        → Angular App
-/backend         → Spring Boot API
-/microservice    → Python Scraper & Logic
-/database        → MongoDB configs
-/docs            → Documentación
+## 📂 Project Structure
+
+```text
+.
+├── frontend/        # Angular SPA
+├── backend/         # Spring Boot API
+├── microservice/    # Python scraping & processing
+├── database/        # MongoDB configuration
+└── docs/            # Documentation
+```
 
 ---
 
-# 📈 Roadmap
-- Mejorar precisión del algoritmo
-- Integración con APIs inmobiliarias
-- Dashboard de análisis avanzado
-- Sistema de recomendaciones
-- Deploy en cloud
+## 📈 Roadmap
+
+- [ ] Mejorar precisión del algoritmo
+- [ ] Integración con APIs inmobiliarias
+- [ ] Dashboard de análisis avanzado
+- [ ] Sistema de recomendaciones
+- [ ] Deploy en cloud
 
 ---
 
-# 👥 Team
+## 👥 Team
+
 Proyecto Intermodular DAW - UNIR FP
 
-- Stephen Nicholas Jones De Giorgi
-    Microservicio Python, scraping, algoritmo y PDF
-- Juan Montiel Fernández
-    Backend (Spring Boot), API REST y base de datos
-- Kyle Lamm
-    Frontend (Angular), UI/UX y mapas
+- **Stephen Nicholas Jones De Giorgi**  
+  Microservicio Python, scraping, algoritmo y PDF  
+
+- **Juan Montiel Fernández**  
+  Backend (Spring Boot), API REST y base de datos  
+
+- **Kyle Lamm**  
+  Frontend (Angular), UI/UX y mapas  
 
 ---
-# 📄 License
+## 📄 License
 Proyecto académico - UNIR (DAW)
