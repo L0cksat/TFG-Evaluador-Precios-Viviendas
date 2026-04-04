@@ -146,22 +146,22 @@ python app.py
 ---
 
 # 📈 Roadmap
-· Mejorar precisión del algoritmo
-· Integración con APIs inmobiliarias
-· Dashboard de análisis avanzado
-· Sistema de recomendaciones
-· Deploy en cloud
+- Mejorar precisión del algoritmo
+- Integración con APIs inmobiliarias
+- Dashboard de análisis avanzado
+- Sistema de recomendaciones
+- Deploy en cloud
 
 ---
 
 # 👥 Team
 Proyecto Intermodular DAW - UNIR FP
 
-· Stephen Nicholas Jones De Giorgi
+- Stephen Nicholas Jones De Giorgi
     Microservicio Python, scraping, algoritmo y PDF
-· Juan Montiel Fernández
+- Juan Montiel Fernández
     Backend (Spring Boot), API REST y base de datos
-· Kyle Lamm
+- Kyle Lamm
     Frontend (Angular), UI/UX y mapas
 
 ---
