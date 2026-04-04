@@ -11,7 +11,6 @@ import { InmobilarioBuscarService } from '../services/inmobilario-buscar';
 import { HomeDataService } from '../services/home-data';
 import { GeocodingService } from '../services/geocoding';
 import * as L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 
 @Component({
   selector: 'app-evaluador',

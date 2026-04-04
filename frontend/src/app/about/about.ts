@@ -31,17 +31,17 @@ export class AboutComponent {
     {
       nombre: 'Stephen Nicholas Jones De Giorgi',
       puesto: 'Desarrollador Full Stack, creación de microservicio Python',
-      descripcion: '¡Hola! Soy Stephen Nicholas Jones De Giorgi (Bueno me puedes llamar Nicky) y siempre he estado enamorado de la tecnología, también tomé la decisión de cambiar de aires y embarcar en la FP de DAW, que estoy en la fase final de la formación y con ganas de trabajar en este sector. Me encanta la escritura, los videojuegos, la programación y los deportes. Soy padre de dos hijos',
+      descripcion: '¡Hola! Soy Stephen Nicholas Jones De Giorgi (Bueno me puedes llamar Nicky) y siempre he estado enamorado de la tecnología, también tomé la decisión de cambiar de aires y embarcar en la FP de DAW, que estoy en la fase final de la formación y con ganas de trabajar en este sector. Me encanta la escritura, los videojuegos, la programación y los deportes. Soy padre de dos hijos.',
       imagen: 'images/NickyJones.jpg',
       github: 'https://github.com/L0cksat',
       website: 'https://stephennicholasjones.com/'
     },
     {
-      nombre: 'Nombre Compañero 2',
-      puesto: 'Diseñador UI/UX',
+      nombre: 'Juan Montiel Fernández',
+      puesto: 'Desarrollador Full Stack - Diseñador del backend en Spring Boot',
       descripcion: 'Descripción sobre el diseño de la interfaz y la experiencia de usuario de Evaluty.',
-      imagen: 'assets/images/perfil3.jpg',
-      linkedin: 'https://linkedin.com/in/usuario3'
+      imagen: 'images/Juan1.jpg',
+      linkedin: 'https://www.linkedin.com/in/xmontiel/'
     }
   ];
 }

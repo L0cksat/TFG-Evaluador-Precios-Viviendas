@@ -1,68 +1,29 @@
-# Estructura Angular de la parte _"frontend"_
+# 💻 Frontend: Angular SPA (Evaluty)
 
-## README de la estructura.
-Aquí vamos a usar el framework de ***Angular*** para el montaje de la página del _"hoempage"_
-consistiendo del logo de la _"empresa"_, un hero image, y algun otra función más.
+Este módulo contiene la Interfaz de Usuario (UI) de la aplicación, desarrollada por **Kyle Lamm**. Es una *Single Page Application* (SPA) diseñada con un enfoque minimalista y accesible [cite: 320], optimizada para ofrecer la mejor Experiencia de Usuario (UX) a particulares y agentes inmobiliarios [cite: 366-378].
 
-Se va a proceder a realizar un _"Mockup"_ de la página principal y que es lo que llevará en cuestión de diseño y de funcionalidades.
+## 🛠️ Tecnologías Utilizadas
+* **Framework:** Angular / TypeScript [cite: 229, 344]
+* **Mapas:** Leaflet + OpenStreetMap [cite: 380]
+* **Estilos:** CSS3 / HTML5 (Diseño en Figma) [cite: 364]
 
+## 🚀 Funcionalidades Principales
+* **Mapa Interactivo:** Integración de Leaflet que permite a los usuarios seleccionar una ubicación en el mapa. Utiliza geocodificación inversa (*Reverse Geocoding*) mediante Nominatim para autocompletar la dirección postal en el formulario [cite: 382-384, 539].
+* **Gestión de Estado y Sesión:** Manejo e inyección del token JWT en las cabeceras HTTP (`Authorization: Bearer`) para interactuar de forma segura con los endpoints protegidos del backend[cite: 442].
+* **Accesibilidad:** Puntuación de 89 en Lighthouse, asegurando contrastes adecuados y navegación intuitiva[cite: 356, 371].
+* **Consumo de API:** Recepción de resultados matemáticos y visualización de descargas de informes PDF [cite: 433-436].
 
-# MyFrontend
+## 📦 Instalación y Ejecución
+1. Asegúrate de tener **Node.js** y **Angular CLI** instalados.
+2. Clona el repositorio y navega a este directorio.
+3. Instala las dependencias:
+   ```bash
+   npm install
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.6.
+4.Levanta el servidor de desarrollo:
+    ```bash
+    ng serve
 
-## Development server
+5.Navega a http://localhost:4200 en tu navegador.
 
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
