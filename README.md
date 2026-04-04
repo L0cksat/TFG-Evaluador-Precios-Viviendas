@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/status-in%20development-yellow" />
+  <img src="https://img.shields.io/badge/status-Complete-yellow" />
   <img src="https://img.shields.io/badge/frontend-Angular-red" />
   <img src="https://img.shields.io/badge/backend-SpringBoot-green" />
   <img src="https://img.shields.io/badge/microservice-Python-blue" />
