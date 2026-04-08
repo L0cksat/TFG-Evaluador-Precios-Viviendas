@@ -39,8 +39,8 @@ export class AboutComponent {
     {
       nombre: 'Juan Montiel Fernández',
       puesto: 'Desarrollador Full Stack - Diseñador del backend en Spring Boot',
-      descripcion: 'Descripción sobre el diseño de la interfaz y la experiencia de usuario de Evaluty.',
-      imagen: 'images/Juan1.jpg',
+      descripcion: 'Soy un profesional orientado a la ciberseguridad y al análisis de inteligencia, con formación en OSINT y certificaciones destacadas como CompTIA Security+, Google Cybersecurity y Google Data Analytics. Actualmente amplío mis competencias técnicas con estudios en CCNA y desarrollo web, integrando conocimientos en redes y programación. Mi experiencia previa en el sector hotelero me ha aportado habilidades de liderazgo, gestión, atención al cliente y resolución de problemas, además de desenvolverme en entornos multilingües. Destaco por mi capacidad de adaptación, aprendizaje continuo y motivación para ayudar a las organizaciones frente a nuevas amenazas.',
+      imagen: 'images/Juan2.jpeg',
       linkedin: 'https://www.linkedin.com/in/xmontiel/'
     }
   ];
