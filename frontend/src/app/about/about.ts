@@ -34,6 +34,7 @@ export class AboutComponent {
       descripcion: '¡Hola! Soy Stephen Nicholas Jones De Giorgi (Bueno me puedes llamar Nicky) y siempre he estado enamorado de la tecnología, también tomé la decisión de cambiar de aires y embarcar en la FP de DAW, que estoy en la fase final de la formación y con ganas de trabajar en este sector. Me encanta la escritura, los videojuegos, la programación y los deportes. Soy padre de dos hijos.',
       imagen: 'images/NickyJones.jpg',
       github: 'https://github.com/L0cksat',
+      linkedin: 'www.linkedin.com/in/stephen-nicholas-jones-de-giorgi-50668449',
       website: 'https://stephennicholasjones.com/'
     },
     {
