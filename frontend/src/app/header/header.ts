@@ -10,6 +10,5 @@ import { AuthService } from '../services/auth.service';
   styleUrl: './header.css',
 })
 export class Header {
-  // It is public so the HTML can read it
   constructor(public authService: AuthService){}
 }

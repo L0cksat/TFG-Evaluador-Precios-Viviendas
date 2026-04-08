@@ -19,11 +19,9 @@ export class LoginComponent {
   onSubmit() {
     this.authService.login(this.credentials).subscribe({
       next: (response) => {
-        // Here you typically save the token to localStorage/sessionStorage
         localStorage.setItem('token', response.token);
         localStorage.setItem('nombre', response.nombre);
         
-        // Redirect to home or dashboard after successful login
         this.router.navigate(['/']); 
       },
       error: (err) => {

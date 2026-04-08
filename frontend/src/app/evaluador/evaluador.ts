@@ -8,10 +8,8 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { InmobilarioBuscarService } from '../services/inmobilario-buscar';
-import { HomeDataService } from '../services/home-data';
 import { GeocodingService } from '../services/geocoding';
 import * as L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 
 @Component({
   selector: 'app-evaluador',
@@ -23,33 +21,29 @@ import 'leaflet/dist/leaflet.css';
 export class EvaluadorComponent implements OnInit {
   formEvaluacion!: FormGroup;
   isLoading: boolean = false;
-  resultadoValoracion: any = null; // Variable to hold the backend response
+  resultadoValoracion: any = null; 
 
   constructor(
     private fb: FormBuilder,
     private ibs: InmobilarioBuscarService,
-    private hds: HomeDataService,
     private geo: GeocodingService,
     private cdr: ChangeDetectorRef,
   ) {}
 
-  // Add 'valuationMode' to your class properties
   valuationMode: 'basic' | 'pro' = 'basic';
 
   ngOnInit(): void {
     const addressPattern = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s\.]+ \d+[a-zA-Z]?, [a-zA-ZñÑáéíóúÁÉÍÓÚ\s\d]+$/;
-    // Catastral references in Spain are usually 20 alphanumeric characters
     const rcPattern = /^[0-9A-Z]{20}$/;
 
     this.formEvaluacion = this.fb.group({
-      direccion: [this.hds.direccion, [Validators.required, Validators.pattern(addressPattern)]],
+      direccion: ['', [Validators.required, Validators.pattern(addressPattern)]],
       referenciaCatastral: ['', [Validators.pattern(rcPattern)]], // New field
       metros: ['', [Validators.required, Validators.min(1)]],
       habitaciones: ['', [Validators.required, Validators.min(0)]],
     });
   }
 
-  // Helper to switch modes and update validators
   setMode(mode: 'basic' | 'pro') {
     this.valuationMode = mode;
     const dirCtrl = this.formEvaluacion.get('direccion');
@@ -70,8 +64,6 @@ export class EvaluadorComponent implements OnInit {
     dirCtrl?.updateValueAndValidity();
     metrosCtrl?.updateValueAndValidity();
   }
-
-  // frontend/src/app/evaluador/evaluador.ts
 
   onSubmit() {
     if (this.formEvaluacion.valid) {
@@ -95,7 +87,6 @@ export class EvaluadorComponent implements OnInit {
         };
       }
 
-      // Use the updated service method passing the payload object
       this.ibs.botInmobilario(payload).subscribe({
         next: (response) => {
           console.log('Valoración procesada exitosamente:', response);
