@@ -8,7 +8,6 @@ export interface ValuationResponse {
   direccion: string;
   precioEstimado: number;
   fecha: string;
-  // Add other fields from your backend ValuationResponse.java
 }
 
 @Injectable({
@@ -22,9 +21,9 @@ export class ValuationService {
   getUserValuations(): Observable<ValuationResponse[]> {
     const token = localStorage.getItem('token');
 
-    let headers = new HttpHeaders(); // Added empty base headers
+    let headers = new HttpHeaders(); 
 
-    // Added only adds token if it truely exists.
+    
     if (token && token !== 'null'){
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
